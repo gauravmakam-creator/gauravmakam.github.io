@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSc Engineering Management - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a1929 0%, #1e3a5f 50%, #2c5f8d 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(10, 25, 41, 0.95);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #4a9eff;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        nav a:hover {
+            color: #4a9eff;
+            background: rgba(74, 158, 255, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            margin-top: -60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><path d="M 100 300 Q 200 200 300 300 T 500 300 T 700 300 T 900 300 T 1100 300" stroke="%234a9eff" stroke-width="2" fill="none" opacity="0.2"/><path d="M 100 350 Q 250 250 400 350 T 700 350 T 1000 350" stroke="%234a9eff" stroke-width="2" fill="none" opacity="0.15"/></svg>') center/cover;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(74, 158, 255, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: #b0d4ff;
+            margin-bottom: 2rem;
+        }
+
+        /* Sections */
+        section {
+            min-height: 100vh;
+            padding: 6rem 2rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #4a9eff;
+            border-bottom: 3px solid #4a9eff;
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(74, 158, 255, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(74, 158, 255, 0.3);
+        }
+
+        .card h3 {
+            color: #4a9eff;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid #4a9eff;
+            border-radius: 10px;
+        }
+
+        .timeline-item h3 {
+            color: #4a9eff;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(74, 158, 255, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a9eff;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid rgba(74, 158, 255, 0.5);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4a9eff;
+            box-shadow: 0 0 10px rgba(74, 158, 255, 0.3);
+        }
+
+        button {
+            background: linear-gradient(135deg, #4a9eff, #2c5f8d);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: 600;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(74, 158, 255, 0.4);
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .skill-category {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #4a9eff;
+        }
+
+        .skill-category h3 {
+            color: #4a9eff;
+            margin-bottom: 1rem;
+        }
+
+        .skill-category ul {
+            list-style: none;
+        }
+
+        .skill-category li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Email Subscription */
+        .email-subscription {
+            background: rgba(74, 158, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 3rem;
+            border: 2px solid #4a9eff;
+        }
+
+        .email-subscription h3 {
+            color: #4a9eff;
+            margin-bottom: 1rem;
+        }
+
+        .subscription-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 1rem auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .subscription-form input {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.8rem;
+            border: 1px solid rgba(74, 158, 255, 0.5);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid #4caf50;
+            color: #4caf50;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 25, 41, 0.95);
+            padding: 2rem;
+            text-align: center;
+            border-top: 2px solid #4a9eff;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Gaurav Makam</h1>
+            <p>MSc Engineering Management | Aviation & Aerospace Enthusiast</p>
+            <p style="font-size: 1rem; color: #b0d4ff;">Bridging Engineering Excellence with Strategic Management</p>
+        </div>
+    </section>
+
+    <section id="about">
+        <h2>About Me</h2>
+        <div class="cards">
+            <div class="card">
+                <h3>🎓 Academic Excellence</h3>
+                <p>MSc in Engineering Management at Aston University, with Bachelor's in Aeronautical Engineering from Dayananda Sagar College. Strong foundation in aerospace systems and quality engineering.</p>
+            </div>
+            <div class="card">
+                <h3>✈️ Aerospace Experience</h3>
+                <p>Currently working at Capgemini India on Airbus IPC structures. Previous experience includes Quality Control at Asteria Aerospace (UAV systems) and Supply Chain Management at Phyto Castle, with expertise in ERP, Power BI, and vendor management.</p>
+            </div>
+            <div class="card">
+                <h3>🌍 Certified Professional</h3>
+                <p>Recipient of Best Presentation Award at International Conference of Advanced Aeronautical and Aerospace Engineering (ICAAAE). Google-certified in Project Management and Risk Management. Passionate about advancing aerospace technologies globally.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="education">
+        <h2>Education</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <h3>MSc Engineering Management</h3>
+                <p><strong>Aston University</strong> | 2024 - Present</p>
+                <p>Specialization: Operations Management, Project Management, Strategic Leadership</p>
+                <p>Key Modules: Supply Chain Management, Financial Management, Quality Management, Innovation Management</p>
+            </div>
+            <div class="timeline-item">
+                <h3>Bachelor of Aeronautical Engineering</h3>
+                <p><strong>Dayananda Sagar College Of Engineering</strong> | Bengaluru, India | Graduated 05/2024</p>
+                <p>Specialized in aerospace technologies, aircraft systems, and aeronautical engineering principles</p>
+            </div>
+            <div class="timeline-item">
+                <h3>Diploma in Aeronautical Engineering</h3>
+                <p><strong>Acharya Polytechnic</strong> | Bengaluru, India | Graduated 08/2021</p>
+                <p>Foundation in aeronautical engineering fundamentals and technical applications</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <h2>Technical Skills & Competencies</h2>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3>Engineering Management</h3>
+                <ul>
+                    <li>Project Management (Google Certified)</li>
+                    <li>Risk Management (Google Certified)</li>
+                    <li>Operations Optimization</li>
+                    <li>Supply Chain Management</li>
+                    <li>Quality Assurance (CAPA)</li>
+                </ul>
+            </div>
+            <div class="skill-category">
+                <h3>Technical Skills</h3>
+                <ul>
+                    <li>CAD Software (CATIA V5, SolidWorks, Inventor)</li>
+                    <li>Finite Element Analysis (Ansys)</li>
+                    <li>Programming (Python, Java)</li>
+                    <li>Business Intelligence (Power BI, SAP)</li>
+                    <li>Quality Control & Inspection</li>
+                </ul>
+            </div>
+            <div class="skill-category">
+                <h3>Aviation Knowledge</h3>
+                <ul>
+                    <li>Aircraft Systems</li>
+                    <li>Aerospace Manufacturing</li>
+                    <li>Aviation Regulations (EASA, DGCA)</li>
+                    <li>MRO Operations</li>
+                    <li>Supply Chain in Aerospace</li>
+                </ul>
+            </div>
+            <div class="skill-category">
+                <h3>Soft Skills</h3>
+                <ul>
+                    <li>Leadership & Team Management</li>
+                    <li>Cross-cultural Communication</li>
+                    <li>Problem Solving</li>
+                    <li>Stakeholder Management</li>
+                    <li>Presentation Skills</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2>Projects & Research</h2>
+        <div class="cards">
+            <div class="card">
+                <h3>Modelling and Fabrication of Pulse Jet Engine</h3>
+                <p><strong>Role:</strong> Design Lead | <strong>Institution:</strong> Dayananda Sagar College Of Engineering</p>
+                <p>Led the designing, modelling, and integration of a pulse jet engine. Conducted comprehensive thermal and structural analysis to evaluate performance characteristics and fabricated a working prototype demonstrating thrust generation principles.</p>
+            </div>
+            <div class="card">
+                <h3>Design and Analysis of Landing Gear Components</h3>
+                <p><strong>Role:</strong> Design Engineer | <strong>Focus:</strong> Materials Research</p>
+                <p>Designed and modelled landing gear components using various materials. Performed structural analysis to evaluate performance under different load conditions, optimizing for weight and strength characteristics.</p>
+            </div>
+            <div class="card">
+                <h3>IoT-Enabled Drone System</h3>
+                <p><strong>Role:</strong> Systems Integration Lead</p>
+                <p>Designed and integrated a quadcopter drone infused with IoT technology. Managed costing analysis, component selection, and system integration for real-time monitoring and control capabilities.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience">
+        <h2>Professional Experience</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <h3>Associate 1 - IPC Structures</h3>
+                <p><strong>Capgemini India</strong> | Bengaluru, India | August 2024 - May 2025</p>
+                <p>• Develop and maintain Illustrated Parts Catalogs (IPC) for Airbus aircrafts</p>
+                <p>• Interpret engineering drawings, CAD models, and design modifications to update IPC content</p>
+                <p>• Collaborate with design engineers, stress analysts, and technical authors to ensure correct part representation</p>
+                <p>• Research Service Bulletins (SBs), Airworthiness Directives (ADs), and Modifications (MODs) to assess structural changes and use Airbus-specific authoring tools and standards to create structured technical data</p>
+            </div>
+            <div class="timeline-item">
+                <h3>Consultant - Quality Control and Assurance</h3>
+                <p><strong>Asteria Aerospace</strong> | Bengaluru, India | February 2024 - August 2024</p>
+                <p>• Monitored production activities to ensure conformance to established methods and procedures</p>
+                <p>• Responsible for configuring multiple UAVs during in-house testing and calibrated components for proper functioning in field testing</p>
+                <p>• Reviewed engineering drawings, process specifications, test requirements, inspection plans, and test jigs to ensure accuracy</p>
+                <p>• Performed data analysis to identify root causes of quality issues and developed corrective actions and preventive actions</p>
+            </div>
+            <div class="timeline-item">
+                <h3>Intern - Supply Chain Department</h3>
+                <p><strong>Phyto Castle</strong> | Bengaluru, India | January 2022 - July 2022</p>
+                <p>• Supported procurement team in vendor management, including evaluating supplier performance and tracking on-time delivery metrics</p>
+                <p>• Developed dashboards using Power BI to visualize lead times, stock levels, and vendor reliability KPIs</p>
+                <p>• Supported ERP data entry and maintenance for BOMs (Bills of Materials), purchase orders, and work orders</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Get In Touch</h2>
+        
+        <!-- Email Subscription Box -->
+        <div class="email-subscription">
+            <h3>📧 Employers & Recruiters Newsletter</h3>
+            <p>Subscribe to receive updates about my projects, certifications, and availability</p>
+            <form class="subscription-form" id="subscriptionForm">
+                <input type="email" placeholder="Enter your email" id="subscribeEmail" required>
+                <button type="submit">Subscribe</button>
+            </form>
+            <div class="success-message" id="subscribeSuccess">✓ Thank you for subscribing!</div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="contact-form">
+            <h3 style="color: #4a9eff; margin-bottom: 1.5rem;">Contact Me</h3>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="company">Company/Organization</label>
+                    <input type="text" id="company" name="company">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit">Send Message</button>
+            </form>
+            <div class="success-message" id="contactSuccess">✓ Message sent successfully!</div>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <p><strong>Email:</strong> gauravmakam2@gmail.com</p>
+            <p><strong>Phone (UK):</strong> +44 7721442879</p>
+            <p><strong>Phone (India):</strong> +91 9141329806</p>
+            <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/gaurav-makam" style="color: #4a9eff;">linkedin.com/in/gaurav-makam</a></p>
+            <p><strong>Location:</strong> Bengaluru, India | Currently in UK for MSc</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Gaurav Makam. All rights reserved.</p>
+        <p>MSc Engineering Management | Aviation & Aerospace Professional</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Store email subscriptions in memory
+        const subscribers = [];
+        const contactMessages = [];
+
+        // Subscription form handler
+        document.getElementById('subscriptionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('subscribeEmail').value;
+            
+            // Store in memory
+            subscribers.push({
+                email: email,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Send notification to FormSubmit (REPLACE WITH YOUR EMAIL)
+            await fetch('https://formsubmit.co/ajax/gauravmakam2@gmail.com', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: 'New Subscriber',
+                    email: email,
+                    message: 'New newsletter subscription',
+                    _subject: 'New Newsletter Subscription!',
+                    _template: 'table'
+                })
+            });
+            
+            document.getElementById('subscribeSuccess').style.display = 'block';
+            document.getElementById('subscribeEmail').value = '';
+            setTimeout(() => {
+                document.getElementById('subscribeSuccess').style.display = 'none';
+            }, 3000);
+        });
+
+        // Contact form handler
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                company: document.getElementById('company').value,
+                message: document.getElementById('message').value,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Store in memory
+            contactMessages.push(formData);
+            
+            // Send notification to FormSubmit (REPLACE WITH YOUR EMAIL)
+            await fetch('https://formsubmit.co/ajax/gauravmakam2@gmail.com', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    company: formData.company,
+                    message: formData.message,
+                    _subject: 'New Contact Form Submission!',
+                    _template: 'table'
+                })
+            });
+            
+            document.getElementById('contactSuccess').style.display = 'block';
+            document.getElementById('contactForm').reset();
+            setTimeout(() => {
+                document.getElementById('contactSuccess').style.display = 'none';
+            }, 3000);
+        });
+
+        // Log activity (for demonstration)
+        console.log('Total subscribers:', subscribers.length);
+        console.log('Total contact messages:', contactMessages.length);
+    </script>
+</body>
+</html>
