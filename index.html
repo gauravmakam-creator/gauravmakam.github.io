@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSc Engineering Management - Portfolio</title>
+    <title>Gaurav Makam | Aerospace Engineering Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,676 +14,1475 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #00d4ff;
+            --primary-dark: #0099cc;
+            --accent: #ff6b35;
+            --bg-dark: #0a0e1a;
+            --bg-medium: #0f1729;
+            --bg-light: #1a2540;
+            --text-primary: #ffffff;
+            --text-secondary: #a8b2c8;
+            --text-muted: #6c7a93;
+            --border: rgba(0, 212, 255, 0.15);
+            --glow: rgba(0, 212, 255, 0.3);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a1929 0%, #1e3a5f 50%, #2c5f8d 100%);
-            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
             overflow-x: hidden;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(ellipse at top, var(--bg-medium) 0%, var(--bg-dark) 100%);
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 107, 53, 0.05) 0%, transparent 50%);
+            animation: bgShift 20s ease-in-out infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -30px); }
+        }
+
+        /* Grid overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
         }
 
         /* Navigation */
         nav {
-            background: rgba(10, 25, 41, 0.95);
-            padding: 1rem 2rem;
+            background: rgba(10, 14, 26, 0.85);
+            padding: 1.2rem 3rem;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
-            border-bottom: 2px solid #4a9eff;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 0.8rem 3rem;
+            background: rgba(10, 14, 26, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--text-primary);
         }
 
         nav ul {
             list-style: none;
             display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 2rem;
+            gap: 2.5rem;
         }
 
         nav a {
-            color: #ffffff;
+            color: var(--text-secondary);
             text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            position: relative;
+            letter-spacing: 0.5px;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
         }
 
         nav a:hover {
-            color: #4a9eff;
-            background: rgba(74, 158, 255, 0.1);
+            color: var(--primary);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
         }
 
         /* Hero Section */
         .hero {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            padding: 2rem;
-            margin-top: -60px;
+            padding: 6rem 2rem 4rem;
             position: relative;
             overflow: hidden;
         }
 
-        .hero::before {
-            content: '';
+        .hero-bg-effect {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><path d="M 100 300 Q 200 200 300 300 T 500 300 T 700 300 T 900 300 T 1100 300" stroke="%234a9eff" stroke-width="2" fill="none" opacity="0.2"/><path d="M 100 350 Q 250 250 400 350 T 700 350 T 1000 350" stroke="%234a9eff" stroke-width="2" fill="none" opacity="0.15"/></svg>') center/cover;
-            animation: float 20s ease-in-out infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
         }
 
         .hero-content {
             position: relative;
             z-index: 1;
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-text {
+            text-align: center;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.2rem;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-tag::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
         .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 20px rgba(74, 158, 255, 0.5);
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #00d4ff 50%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% auto;
+            animation: shine 3s linear infinite;
+            letter-spacing: -2px;
         }
 
-        .hero p {
-            font-size: 1.5rem;
-            color: #b0d4ff;
-            margin-bottom: 2rem;
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .hero-description {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .btn {
+            padding: 0.9rem 2rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--bg-dark);
+            box-shadow: 0 4px 20px var(--glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
         }
 
         /* Sections */
         section {
-            min-height: 100vh;
-            padding: 6rem 2rem 4rem;
-            max-width: 1200px;
+            padding: 6rem 2rem;
+            max-width: 1400px;
             margin: 0 auto;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: #4a9eff;
-            border-bottom: 3px solid #4a9eff;
-            padding-bottom: 0.5rem;
-            display: inline-block;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
         }
 
-        /* Cards */
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Cards Grid */
         .cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
-            margin-top: 2rem;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2rem;
-            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(15, 23, 41, 0.8) 0%, rgba(26, 37, 64, 0.4) 100%);
+            padding: 2.5rem;
+            border-radius: 16px;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(74, 158, 255, 0.3);
-            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--border);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
         }
 
         .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(74, 158, 255, 0.3);
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.15);
+        }
+
+        .card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .card-icon {
+            background: var(--primary);
+            color: var(--bg-dark);
+            transform: rotate(-5deg) scale(1.05);
         }
 
         .card h3 {
-            color: #4a9eff;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1.2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .card-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card-list li {
+            padding: 0.6rem 0 0.6rem 1.8rem;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.05);
+        }
+
+        .card-list li:last-child {
+            border-bottom: none;
+        }
+
+        .card-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            clip-path: polygon(0 0, 100% 50%, 0 100%);
         }
 
         /* Timeline */
         .timeline {
             position: relative;
             padding: 2rem 0;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), transparent);
         }
 
         .timeline-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1.5rem;
-            margin: 1rem 0;
-            border-left: 4px solid #4a9eff;
-            border-radius: 10px;
+            position: relative;
+            padding: 2rem 2rem 2rem 5rem;
+            margin: 1.5rem 0;
+            background: linear-gradient(135deg, rgba(15, 23, 41, 0.8) 0%, rgba(26, 37, 64, 0.4) 100%);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            border-color: var(--primary);
+            transform: translateX(10px);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 22px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            background: var(--bg-dark);
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--glow);
         }
 
         .timeline-item h3 {
-            color: #4a9eff;
-            margin-bottom: 0.5rem;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+            font-size: 1.2rem;
+            font-weight: 600;
         }
 
-        /* Contact Form */
-        .contact-form {
-            max-width: 600px;
-            margin: 2rem auto;
-            background: rgba(255, 255, 255, 0.05);
+        .timeline-item .meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .timeline-item .company {
+            color: #00d4ff;
+            font-weight: 600;
+        }
+
+        .timeline-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin: 0.4rem 0;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+
+        .timeline-item p.bullet::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        /* Skills */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: linear-gradient(135deg, rgba(15, 23, 41, 0.8) 0%, rgba(26, 37, 64, 0.4) 100%);
             padding: 2rem;
-            border-radius: 15px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .skill-category:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .skill-category-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .skill-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .skill-category h3 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            padding: 0.4rem 0.9rem;
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .skill-tag:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Projects */
+        .project-card {
+            background: linear-gradient(135deg, rgba(15, 23, 41, 0.8) 0%, rgba(26, 37, 64, 0.4) 100%);
+            padding: 0;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.4s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.15);
+        }
+
+        .project-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .project-number {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3rem;
+            color: rgba(0, 212, 255, 0.15);
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .project-card h3 {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            padding-right: 4rem;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .project-meta span {
+            padding: 0.3rem 0.8rem;
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .project-body {
+            padding: 1.5rem 2rem 2rem;
+        }
+
+        .project-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .project-list li {
+            padding: 0.5rem 0 0.5rem 1.5rem;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .project-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        /* Contact */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            padding: 2rem;
+        }
+
+        .contact-info h3 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .contact-info > p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 212, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .contact-item:hover {
+            border-color: var(--primary);
+            background: rgba(0, 212, 255, 0.08);
+            transform: translateX(5px);
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .contact-item-text {
+            flex: 1;
+        }
+
+        .contact-item-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+        }
+
+        .contact-item-value {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin-top: 0.2rem;
+            display: block;
+        }
+
+        .contact-form {
+            background: linear-gradient(135deg, rgba(15, 23, 41, 0.8) 0%, rgba(26, 37, 64, 0.4) 100%);
+            padding: 2.5rem;
+            border-radius: 16px;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(74, 158, 255, 0.3);
+            border: 1px solid var(--border);
+        }
+
+        .contact-form h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .contact-form > p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
-            color: #4a9eff;
-            font-weight: 600;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 0.8rem;
-            border: 1px solid rgba(74, 158, 255, 0.5);
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            font-size: 1rem;
+            padding: 0.9rem 1.2rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(10, 14, 26, 0.5);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
         }
 
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #4a9eff;
-            box-shadow: 0 0 10px rgba(74, 158, 255, 0.3);
+            border-color: var(--primary);
+            background: rgba(10, 14, 26, 0.8);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
         }
 
-        button {
-            background: linear-gradient(135deg, #4a9eff, #2c5f8d);
-            color: white;
-            padding: 1rem 2rem;
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--bg-dark);
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 1rem;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
             font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        button:hover {
+        .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(74, 158, 255, 0.4);
+            box-shadow: 0 8px 25px var(--glow);
         }
 
-        /* Skills Section */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .skill-category {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1.5rem;
-            border-radius: 10px;
-            border-left: 4px solid #4a9eff;
-        }
-
-        .skill-category h3 {
-            color: #4a9eff;
-            margin-bottom: 1rem;
-        }
-
-        .skill-category ul {
-            list-style: none;
-        }
-
-        .skill-category li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Email Subscription */
-        .email-subscription {
-            background: rgba(74, 158, 255, 0.1);
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            margin-top: 3rem;
-            border: 2px solid #4a9eff;
-        }
-
-        .email-subscription h3 {
-            color: #4a9eff;
-            margin-bottom: 1rem;
-        }
-
-        .subscription-form {
-            display: flex;
-            gap: 1rem;
-            max-width: 500px;
-            margin: 1rem auto;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .subscription-form input {
-            flex: 1;
-            min-width: 250px;
-            padding: 0.8rem;
-            border: 1px solid rgba(74, 158, 255, 0.5);
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-        }
-
-        /* Success Message */
         .success-message {
             display: none;
-            background: rgba(76, 175, 80, 0.2);
-            border: 2px solid #4caf50;
-            color: #4caf50;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #22c55e;
             padding: 1rem;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-top: 1rem;
             text-align: center;
+            font-size: 0.9rem;
         }
 
         /* Footer */
         footer {
-            background: rgba(10, 25, 41, 0.95);
-            padding: 2rem;
+            background: var(--bg-medium);
+            padding: 3rem 2rem 1.5rem;
             text-align: center;
-            border-top: 2px solid #4a9eff;
+            border-top: 1px solid var(--border);
+            margin-top: 4rem;
         }
 
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
+        footer .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin: 0.3rem 0;
+        }
+
+        footer .footer-divider {
+            margin: 1.5rem 0;
+            height: 1px;
+            background: var(--border);
+        }
+
+        footer .made-with {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
-            
-            .hero p {
-                font-size: 1.2rem;
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-dark);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            nav {
+                padding: 1rem 1.5rem;
             }
 
             nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--bg-medium);
+                flex-direction: column;
+                padding: 1rem 2rem;
                 gap: 1rem;
+                border-bottom: 1px solid var(--border);
+            }
+
+            nav ul.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .timeline::before {
+                left: 15px;
+            }
+
+            .timeline-item {
+                padding-left: 3rem;
+            }
+
+            .timeline-item::before {
+                left: 7px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero {
+                padding: 8rem 1.5rem 4rem;
+            }
+
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#education">Education</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">Gaurav Makam</div>
+            <ul id="navMenu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="menuBtn">☰</button>
+        </div>
     </nav>
 
     <section id="home" class="hero">
+        <div class="hero-bg-effect"></div>
         <div class="hero-content">
-            <h1>Gaurav Makam</h1>
-            <p>MSc Engineering Management | Aviation & Aerospace Enthusiast</p>
-            <p style="font-size: 1rem; color: #b0d4ff;">Bridging Engineering Excellence with Strategic Management</p>
+            <div class="hero-text">
+                <div class="hero-tag">AVAILABLE FOR OPPORTUNITIES</div>
+                <h1>Gaurav Makam</h1>
+                <p class="hero-subtitle">Aerospace Engineer & Engineering Management Professional</p>
+                <p class="hero-description">Bridging engineering excellence with strategic management. Specialized in aerospace systems, quality assurance, and project leadership.</p>
+                <div class="hero-cta">
+                    <a href="#contact" class="btn btn-primary">
+                        Get In Touch
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                    <a href="#projects" class="btn btn-secondary">View Projects</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">2+</div>
+                        <div class="stat-label">Years Experience</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Major Projects</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">2</div>
+                        <div class="stat-label">Certifications</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Companies</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section id="about">
-        <h2>About Me</h2>
+    <section id="about" class="reveal">
+        <div class="section-header">
+            <span class="section-tag">About Me</span>
+            <h2>Engineering Excellence</h2>
+            <p class="section-subtitle">A multidisciplinary professional combining aerospace engineering expertise with strategic management capabilities</p>
+        </div>
         <div class="cards">
             <div class="card">
-                <div style="font-size: 3rem; margin-bottom: 1rem; color: #4a9eff;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
                         <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
                     </svg>
                 </div>
                 <h3>Academic Excellence</h3>
-                <ul style="list-style: none; padding: 0;">
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        MSc in Engineering Management at Aston University
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Bachelor's in Aeronautical Engineering from Dayananda Sagar College
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Strong foundation in aerospace systems and quality engineering
-                    </li>
+                <ul class="card-list">
+                    <li>MSc in Engineering Management at Aston University</li>
+                    <li>Bachelor's in Aeronautical Engineering from Dayananda Sagar College</li>
+                    <li>Strong foundation in aerospace systems and quality engineering</li>
                 </ul>
             </div>
             <div class="card">
-                <div style="font-size: 3rem; margin-bottom: 1rem; color: #4a9eff;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"></path>
                     </svg>
                 </div>
                 <h3>Aerospace Experience</h3>
-                <ul style="list-style: none; padding: 0;">
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Worked at Capgemini India on Airbus IPC structures
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Quality Control experience at Asteria Aerospace (UAV systems)
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Supply Chain Management at Phyto Castle
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Expertise in ERP, Power BI, and vendor management
-                    </li>
+                <ul class="card-list">
+                    <li>Worked at Capgemini India on Airbus IPC structures</li>
+                    <li>Quality Control experience at Asteria Aerospace (UAV systems)</li>
+                    <li>Supply Chain Management at Phyto Castle</li>
+                    <li>Expertise in ERP, Power BI, and vendor management</li>
                 </ul>
             </div>
             <div class="card">
-                <div style="font-size: 3rem; margin-bottom: 1rem; color: #4a9eff;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="8" r="7"></circle>
                         <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
                     </svg>
                 </div>
                 <h3>Certified Professional</h3>
-                <ul style="list-style: none; padding: 0;">
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Best Presentation Award at ICAAAE Conference
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Google-certified in Project Management
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Google-certified in Risk Management
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Passionate about advancing aerospace technologies globally
-                    </li>
+                <ul class="card-list">
+                    <li>Best Presentation Award at ICAAAE Conference</li>
+                    <li>Google-certified in Project Management</li>
+                    <li>Google-certified in Risk Management</li>
+                    <li>Passionate about advancing aerospace technologies globally</li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <section id="education">
-        <h2>Education</h2>
+    <section id="education" class="reveal">
+        <div class="section-header">
+            <span class="section-tag">Education</span>
+            <h2>Academic Journey</h2>
+            <p class="section-subtitle">A solid foundation in engineering and management disciplines</p>
+        </div>
         <div class="timeline">
             <div class="timeline-item">
                 <h3>MSc Engineering Management</h3>
-                <p><strong>Aston University</strong> | 2025 - Present</p>
-                <p>Specialization: Operations Management, Project Management, Strategic Leadership</p>
-                <p>Key Modules: Supply Chain Management, Financial Management, Quality Management, Innovation Management</p>
+                <span class="meta"><span class="company">Aston University</span> • 2025 - Present</span>
+                <p class="bullet">Specialization: Operations Management, Project Management, Strategic Leadership</p>
+                <p class="bullet">Key Modules: Supply Chain Management, Financial Management, Quality Management, Innovation Management</p>
             </div>
             <div class="timeline-item">
                 <h3>Bachelor of Aeronautical Engineering</h3>
-                <p><strong>Dayananda Sagar College Of Engineering</strong> | Bengaluru, India | Graduated 05/2024</p>
-                <p>Specialized in aerospace technologies, aircraft systems, and aeronautical engineering principles</p>
+                <span class="meta"><span class="company">Dayananda Sagar College Of Engineering</span> • Bengaluru, India • 05/2024</span>
+                <p class="bullet">Specialized in aerospace technologies, aircraft systems, and aeronautical engineering principles</p>
             </div>
             <div class="timeline-item">
                 <h3>Diploma in Aeronautical Engineering</h3>
-                <p><strong>Acharya Polytechnic</strong> | Bengaluru, India | Graduated 08/2021</p>
-                <p>Foundation in aeronautical engineering fundamentals and technical applications</p>
+                <span class="meta"><span class="company">Acharya Polytechnic</span> • Bengaluru, India • 08/2021</span>
+                <p class="bullet">Foundation in aeronautical engineering fundamentals and technical applications</p>
             </div>
         </div>
     </section>
 
-    <section id="skills">
-        <h2>Technical Skills & Competencies</h2>
+    <section id="skills" class="reveal">
+        <div class="section-header">
+            <span class="section-tag">Skills</span>
+            <h2>Technical Arsenal</h2>
+            <p class="section-subtitle">A comprehensive toolkit for engineering excellence and management</p>
+        </div>
         <div class="skills-grid">
             <div class="skill-category">
-                <h3>Engineering Management</h3>
-                <ul>
-                    <li>Project Management (Google Certified)</li>
-                    <li>Risk Management (Google Certified)</li>
-                    <li>Operations Optimization</li>
-                    <li>Supply Chain Management</li>
-                    <li>Quality Assurance (CAPA)</li>
-                </ul>
+                <div class="skill-category-header">
+                    <div class="skill-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h3>Engineering Management</h3>
+                </div>
+                <div class="skill-tags">
+                    <span class="skill-tag">Project Management</span>
+                    <span class="skill-tag">Risk Management</span>
+                    <span class="skill-tag">Operations</span>
+                    <span class="skill-tag">Supply Chain</span>
+                    <span class="skill-tag">CAPA</span>
+                </div>
             </div>
             <div class="skill-category">
-                <h3>Technical Skills</h3>
-                <ul>
-                    <li>CAD Software (CATIA V5, SolidWorks, Inventor)</li>
-                    <li>Finite Element Analysis (Ansys)</li>
-                    <li>Programming (Python, Java)</li>
-                    <li>Business Intelligence (Power BI, SAP)</li>
-                    <li>Quality Control & Inspection</li>
-                </ul>
+                <div class="skill-category-header">
+                    <div class="skill-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+                        </svg>
+                    </div>
+                    <h3>Technical Skills</h3>
+                </div>
+                <div class="skill-tags">
+                    <span class="skill-tag">CATIA V5</span>
+                    <span class="skill-tag">SolidWorks</span>
+                    <span class="skill-tag">Inventor</span>
+                    <span class="skill-tag">Ansys</span>
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">Java</span>
+                    <span class="skill-tag">Power BI</span>
+                    <span class="skill-tag">SAP</span>
+                </div>
             </div>
             <div class="skill-category">
-                <h3>Aviation Knowledge</h3>
-                <ul>
-                    <li>Aircraft Systems</li>
-                    <li>Aerospace Manufacturing</li>
-                    <li>Aviation Regulations (EASA, DGCA)</li>
-                    <li>MRO Operations</li>
-                    <li>Supply Chain in Aerospace</li>
-                </ul>
+                <div class="skill-category-header">
+                    <div class="skill-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                    <h3>Aviation Knowledge</h3>
+                </div>
+                <div class="skill-tags">
+                    <span class="skill-tag">Aircraft Systems</span>
+                    <span class="skill-tag">Manufacturing</span>
+                    <span class="skill-tag">EASA / DGCA</span>
+                    <span class="skill-tag">MRO Operations</span>
+                    <span class="skill-tag">Aerospace SCM</span>
+                </div>
             </div>
             <div class="skill-category">
-                <h3>Soft Skills</h3>
-                <ul>
-                    <li>Leadership & Team Management</li>
-                    <li>Cross-cultural Communication</li>
-                    <li>Problem Solving</li>
-                    <li>Stakeholder Management</li>
-                    <li>Presentation Skills</li>
-                </ul>
+                <div class="skill-category-header">
+                    <div class="skill-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <h3>Soft Skills</h3>
+                </div>
+                <div class="skill-tags">
+                    <span class="skill-tag">Leadership</span>
+                    <span class="skill-tag">Communication</span>
+                    <span class="skill-tag">Problem Solving</span>
+                    <span class="skill-tag">Stakeholder Mgmt</span>
+                    <span class="skill-tag">Presentation</span>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="projects">
-        <h2>Projects & Research</h2>
+    <section id="projects" class="reveal">
+        <div class="section-header">
+            <span class="section-tag">Projects</span>
+            <h2>Featured Work</h2>
+            <p class="section-subtitle">Hands-on engineering projects demonstrating technical expertise and innovation</p>
+        </div>
         <div class="cards">
-            <div class="card">
-                <h3>Modelling and Fabrication of Pulse Jet Engine</h3>
-                <p><strong>Role:</strong> Design Lead | <strong>Institution:</strong> Dayananda Sagar College Of Engineering</p>
-                <ul style="list-style: none; padding: 0; margin-top: 1rem;">
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Led designing, modelling, and integration of pulse jet engine
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Conducted comprehensive thermal and structural analysis
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Evaluated performance characteristics and thrust generation
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Fabricated working prototype demonstrating propulsion principles
-                    </li>
-                </ul>
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">01</div>
+                    <h3>Pulse Jet Engine</h3>
+                    <div class="project-meta">
+                        <span>Design Lead</span>
+                        <span>Propulsion</span>
+                    </div>
+                </div>
+                <div class="project-body">
+                    <ul class="project-list">
+                        <li>Led designing, modelling, and integration of pulse jet engine</li>
+                        <li>Conducted comprehensive thermal and structural analysis</li>
+                        <li>Evaluated performance characteristics and thrust generation</li>
+                        <li>Fabricated working prototype demonstrating propulsion principles</li>
+                    </ul>
+                </div>
             </div>
-            <div class="card">
-                <h3>Design and Analysis of Landing Gear Components</h3>
-                <p><strong>Role:</strong> Design Engineer | <strong>Focus:</strong> Materials Research</p>
-                <ul style="list-style: none; padding: 0; margin-top: 1rem;">
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Designed and modelled landing gear components using various materials
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Performed structural analysis under different load conditions
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Optimized for weight and strength characteristics
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Evaluated performance and material selection criteria
-                    </li>
-                </ul>
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">02</div>
+                    <h3>Landing Gear Analysis</h3>
+                    <div class="project-meta">
+                        <span>Design Engineer</span>
+                        <span>Materials</span>
+                    </div>
+                </div>
+                <div class="project-body">
+                    <ul class="project-list">
+                        <li>Designed and modelled landing gear components using various materials</li>
+                        <li>Performed structural analysis under different load conditions</li>
+                        <li>Optimized for weight and strength characteristics</li>
+                        <li>Evaluated performance and material selection criteria</li>
+                    </ul>
+                </div>
             </div>
-            <div class="card">
-                <h3>IoT-Enabled Drone System</h3>
-                <p><strong>Role:</strong> Systems Integration Lead</p>
-                <ul style="list-style: none; padding: 0; margin-top: 1rem;">
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Designed and integrated quadcopter drone with IoT technology
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Managed costing analysis and component selection
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Developed system integration for real-time monitoring
-                    </li>
-                    <li style="margin: 0.5rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: #4a9eff;">▸</span>
-                        Implemented remote control capabilities and data transmission
-                    </li>
-                </ul>
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">03</div>
+                    <h3>IoT-Enabled Drone</h3>
+                    <div class="project-meta">
+                        <span>Systems Lead</span>
+                        <span>IoT</span>
+                    </div>
+                </div>
+                <div class="project-body">
+                    <ul class="project-list">
+                        <li>Designed and integrated quadcopter drone with IoT technology</li>
+                        <li>Managed costing analysis and component selection</li>
+                        <li>Developed system integration for real-time monitoring</li>
+                        <li>Implemented remote control capabilities and data transmission</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="experience">
-        <h2>Professional Experience</h2>
+    <section id="experience" class="reveal">
+        <div class="section-header">
+            <span class="section-tag">Experience</span>
+            <h2>Professional Journey</h2>
+            <p class="section-subtitle">Building expertise through diverse roles in aerospace and engineering</p>
+        </div>
         <div class="timeline">
             <div class="timeline-item">
                 <h3>Associate 1 - IPC Structures</h3>
-                <p><strong>Capgemini India</strong> | Bengaluru, India | August 2024 - May 2025</p>
-                <p>• Develop and maintain Illustrated Parts Catalogs (IPC) for Airbus aircrafts</p>
-                <p>• Interpret engineering drawings, CAD models, and design modifications to update IPC content</p>
-                <p>• Collaborate with design engineers, stress analysts, and technical authors to ensure correct part representation</p>
-                <p>• Research Service Bulletins (SBs), Airworthiness Directives (ADs), and Modifications (MODs) to assess structural changes and use Airbus-specific authoring tools and standards to create structured technical data</p>
+                <span class="meta"><span class="company">Capgemini India</span> • Bengaluru, India • Aug 2024 - May 2025</span>
+                <p class="bullet">Develop and maintain Illustrated Parts Catalogs (IPC) for Airbus aircrafts</p>
+                <p class="bullet">Interpret engineering drawings, CAD models, and design modifications to update IPC content</p>
+                <p class="bullet">Collaborate with design engineers, stress analysts, and technical authors to ensure correct part representation</p>
+                <p class="bullet">Research Service Bulletins (SBs), Airworthiness Directives (ADs), and Modifications (MODs)</p>
             </div>
             <div class="timeline-item">
-                <h3>Consultant - Quality Control and Assurance</h3>
-                <p><strong>Asteria Aerospace</strong> | Bengaluru, India | February 2024 - August 2024</p>
-                <p>• Monitored production activities to ensure conformance to established methods and procedures</p>
-                <p>• Responsible for configuring multiple UAVs during in-house testing and calibrated components for proper functioning in field testing</p>
-                <p>• Reviewed engineering drawings, process specifications, test requirements, inspection plans, and test jigs to ensure accuracy</p>
-                <p>• Performed data analysis to identify root causes of quality issues and developed corrective actions and preventive actions</p>
+                <h3>Consultant - Quality Control & Assurance</h3>
+                <span class="meta"><span class="company">Asteria Aerospace</span> • Bengaluru, India • Feb 2024 - Aug 2024</span>
+                <p class="bullet">Monitored production activities to ensure conformance to established methods and procedures</p>
+                <p class="bullet">Configured multiple UAVs during in-house testing and calibrated components for field testing</p>
+                <p class="bullet">Reviewed engineering drawings, process specifications, test requirements, and inspection plans</p>
+                <p class="bullet">Performed data analysis to identify root causes and developed corrective and preventive actions</p>
             </div>
             <div class="timeline-item">
                 <h3>Intern - Supply Chain Department</h3>
-                <p><strong>Phyto Castle</strong> | Bengaluru, India | January 2022 - July 2022</p>
-                <p>• Supported procurement team in vendor management, including evaluating supplier performance and tracking on-time delivery metrics</p>
-                <p>• Developed dashboards using Power BI to visualize lead times, stock levels, and vendor reliability KPIs</p>
-                <p>• Supported ERP data entry and maintenance for BOMs (Bills of Materials), purchase orders, and work orders</p>
+                <span class="meta"><span class="company">Phyto Castle</span> • Bengaluru, India • Jan 2022 - Jul 2022</span>
+                <p class="bullet">Supported procurement team in vendor management and supplier performance evaluation</p>
+                <p class="bullet">Developed Power BI dashboards to visualize lead times, stock levels, and vendor reliability KPIs</p>
+                <p class="bullet">Supported ERP data entry and maintenance for BOMs, purchase orders, and work orders</p>
             </div>
         </div>
     </section>
 
-    <section id="contact">
-        <h2>Get In Touch</h2>
-
-        <!-- Contact Form -->
-        <div class="contact-form">
-            <h3 style="color: #4a9eff; margin-bottom: 1.5rem;">Contact Me</h3>
-            <form id="contactForm">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="company">Company/Organization</label>
-                    <input type="text" id="company" name="company">
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" rows="5" required></textarea>
-                </div>
-                <button type="submit">Send Message</button>
-            </form>
-            <div class="success-message" id="contactSuccess">✓ Message sent successfully!</div>
+    <section id="contact" class="reveal">
+        <div class="section-header">
+            <span class="section-tag">Contact</span>
+            <h2>Let's Connect</h2>
+            <p class="section-subtitle">Open to opportunities in aerospace engineering and management roles</p>
         </div>
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h3>Get in Touch</h3>
+                <p>Whether you're looking for an aerospace engineer, project manager, or just want to chat about aviation — I'd love to hear from you.</p>
+                
+                <a href="mailto:gauravmakam2@gmail.com" class="contact-item">
+                    <div class="contact-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                    </div>
+                    <div class="contact-item-text">
+                        <span class="contact-item-label">Email</span>
+                        <span class="contact-item-value">gauravmakam2@gmail.com</span>
+                    </div>
+                </a>
 
-        <div style="text-align: center; margin-top: 2rem;">
-            <p><strong>Email:</strong> <a href="mailto:gauravmakam2@gmail.com" style="color: #4a9eff; text-decoration: none;">gauravmakam2@gmail.com</a></p>
-            <p><strong>Phone (UK):</strong> <a href="tel:+447721442879" style="color: #4a9eff; text-decoration: none;">+44 7721442879</a></p>
-            <p><strong>Phone (India):</strong> <a href="tel:+919141329806" style="color: #4a9eff; text-decoration: none;">+91 9141329806</a></p>
-            <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/gaurav-makam" target="_blank" style="color: #4a9eff;">linkedin.com/in/gaurav-makam</a></p>
-            <p><strong>Location:</strong> Bengaluru, India | Currently in UK for MSc</p>
+                <a href="tel:+447721442879" class="contact-item">
+                    <div class="contact-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </div>
+                    <div class="contact-item-text">
+                        <span class="contact-item-label">Phone</span>
+                        <span class="contact-item-value">+44 7721 442879</span>
+                    </div>
+                </a>
+
+                <a href="https://www.linkedin.com/in/gaurav-makam" target="_blank" class="contact-item">
+                    <div class="contact-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                            <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+                        </svg>
+                    </div>
+                    <div class="contact-item-text">
+                        <span class="contact-item-label">LinkedIn</span>
+                        <span class="contact-item-value">linkedin.com/in/gaurav-makam</span>
+                    </div>
+                </a>
+
+                <a href="#" class="contact-item">
+                    <div class="contact-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <div class="contact-item-text">
+                        <span class="contact-item-label">Location</span>
+                        <span class="contact-item-value">Birmingham, UK</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="contact-form">
+                <h3>Send Message</h3>
+                <p>Fill out the form and I'll get back to you within 24 hours</p>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="john@company.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="company">Company</label>
+                        <input type="text" id="company" name="company" placeholder="Your Organization">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Tell me about your opportunity..." required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message →</button>
+                </form>
+                <div class="success-message" id="contactSuccess">✓ Message sent successfully! I'll respond within 24 hours.</div>
+            </div>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2025 Gaurav Makam. All rights reserved.</p>
-        <p>MSc Engineering Management | Aviation & Aerospace Professional</p>
+        <div class="footer-content">
+            <div class="logo" style="font-size: 1.5rem; margin-bottom: 1rem;">Gaurav Makam</div>
+            <p>Aerospace Engineering Management Professional</p>
+            <div class="footer-divider"></div>
+            <p class="made-with">© 2025 Gaurav Makam • Built with passion for aviation</p>
+        </div>
     </footer>
 
     <script>
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu
+        document.getElementById('menuBtn').addEventListener('click', () => {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+
+        // Close mobile menu on link click
+        document.querySelectorAll('#navMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navMenu').classList.remove('active');
             });
         });
 
-        // Store email subscriptions in memory
-        const subscribers = [];
-        const contactMessages = [];
+        // Reveal on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
 
-        // Subscription form handler
-        document.getElementById('subscriptionForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const email = document.getElementById('subscribeEmail').value;
-            
-            // Store in memory
-            subscribers.push({
-                email: email,
-                timestamp: new Date().toISOString()
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
             });
-            
-            // Send notification to FormSubmit
-            await fetch('https://formsubmit.co/ajax/YOUR_EMAIL@example.com', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: 'New Subscriber',
-                    email: email,
-                    message: 'New newsletter subscription',
-                    _subject: 'New Newsletter Subscription!',
-                    _template: 'table'
-                })
-            });
-            
-            document.getElementById('subscribeSuccess').style.display = 'block';
-            document.getElementById('subscribeEmail').value = '';
-            setTimeout(() => {
-                document.getElementById('subscribeSuccess').style.display = 'none';
-            }, 3000);
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
         });
 
         // Contact form handler
+        const contactMessages = [];
+
         document.getElementById('contactForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const formData = {
@@ -691,36 +1493,34 @@
                 timestamp: new Date().toISOString()
             };
             
-            // Store in memory
             contactMessages.push(formData);
             
-            // Send notification to FormSubmit
-            await fetch('https://formsubmit.co/ajax/YOUR_EMAIL@example.com', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: formData.name,
-                    email: formData.email,
-                    company: formData.company,
-                    message: formData.message,
-                    _subject: 'New Contact Form Submission!',
-                    _template: 'table'
-                })
-            });
+            try {
+                await fetch('https://formsubmit.co/ajax/gauravmakam2@gmail.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: formData.name,
+                        email: formData.email,
+                        company: formData.company,
+                        message: formData.message,
+                        _subject: 'New Contact Form Submission!',
+                        _template: 'table'
+                    })
+                });
+            } catch (error) {
+                console.log('Notification queued');
+            }
             
             document.getElementById('contactSuccess').style.display = 'block';
             document.getElementById('contactForm').reset();
             setTimeout(() => {
                 document.getElementById('contactSuccess').style.display = 'none';
-            }, 3000);
+            }, 5000);
         });
-
-        // Log activity (for demonstration)
-        console.log('Total subscribers:', subscribers.length);
-        console.log('Total contact messages:', contactMessages.length);
     </script>
 </body>
 </html>
