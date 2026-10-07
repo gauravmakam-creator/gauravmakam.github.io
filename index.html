@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gaurav Makam | Aerospace Engineer &amp; Engineering Management</title>
-    <meta name="description" content="Gaurav Makam — Aerospace engineer and MSc Engineering Management (Aston University) with experience across Airbus IPC structures, UAV quality assurance, HAL, supply chain and inventory auditing. Based in Birmingham, UK.">
+    <meta name="description" content="Gaurav Makam — Aerospace engineer and MSc Engineering Management (Aston University) with experience across Airbus IPC structures, UAV quality assurance, HAL, supply chain, inventory auditing and airline data analytics. Based in Birmingham, UK.">
     <meta property="og:title" content="Gaurav Makam | Aerospace Engineer & Engineering Management">
     <meta property="og:description" content="Aerospace engineering, quality assurance and supply chain experience — Capgemini Engineering (Airbus), Asteria Aerospace, HAL, RGIS UK.">
     <meta property="og:type" content="website">
@@ -315,6 +315,38 @@
         .project-meta span { font-family: var(--mono); font-size: 0.72rem; padding: 0.25rem 0.65rem; border-radius: 6px; border: 1px solid var(--border); color: var(--text-secondary); }
         .project-meta span:first-child { color: var(--accent); border-color: rgba(255, 107, 53, 0.3); }
 
+        /* Featured data project */
+        .featured { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 0; overflow: hidden; margin-bottom: 1.5rem; position: relative; }
+        .featured:hover { border-color: rgba(0, 212, 255, 0.4); }
+        .featured-badge { display: inline-flex; align-items: center; gap: 0.45rem; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 1.5px; color: var(--accent); border: 1px solid rgba(255, 107, 53, 0.35); background: rgba(255, 107, 53, 0.08); padding: 0.3rem 0.75rem; border-radius: 50px; margin-bottom: 1rem; }
+        .featured-map { position: relative; background: radial-gradient(ellipse at 30% 40%, rgba(0, 212, 255, 0.10), transparent 70%), rgba(10, 14, 26, 0.6); border-right: 1px solid var(--border); padding: 1.2rem; display: flex; flex-direction: column; justify-content: center; }
+        .featured-map svg { width: 100%; height: auto; display: block; }
+        .featured-map .rt { fill: none; stroke: rgba(0, 212, 255, 0.28); stroke-width: 0.7; }
+        .featured-map .rt.hubf { stroke: #ff6b35; stroke-width: 1.6; opacity: 0.95; filter: drop-shadow(0 0 3px rgba(255, 107, 53, 0.7)); }
+        .featured-map .ap circle { fill: #a8dcff; opacity: 0.8; }
+        .featured-map .sea { fill: #00d4ff; stroke: #0a0e1a; stroke-width: 1.5; }
+        .featured-map .lbl { fill: #fff; font: 600 12px 'JetBrains Mono', monospace; }
+        .featured-map .draw .rt { stroke-dasharray: 1400; stroke-dashoffset: 1400; }
+        .reveal.active .featured-map .draw .rt { animation: drawRoutes 3s ease forwards; }
+        .reveal.active .featured-map .draw .rt.hubf { animation-delay: 1.4s; }
+        @keyframes drawRoutes { to { stroke-dashoffset: 0; } }
+        .map-legend { display: flex; gap: 1.2rem; flex-wrap: wrap; font-family: var(--mono); font-size: 0.72rem; color: var(--text-muted); margin-top: 0.8rem; }
+        .map-legend i { display: inline-block; width: 18px; height: 2px; vertical-align: middle; margin-right: 0.4rem; background: rgba(0, 212, 255, 0.6); }
+        .map-legend i.o { background: #ff6b35; height: 3px; }
+        .featured-body { padding: 2.2rem; }
+        .featured-body h3 { font-size: 1.6rem; line-height: 1.2; margin-bottom: 0.7rem; }
+        .featured-body > p { color: var(--text-secondary); margin-bottom: 1.3rem; }
+        .kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7rem; margin-bottom: 1.3rem; }
+        .kpi { padding: 0.8rem; border-radius: 10px; background: rgba(10, 14, 26, 0.6); border: 1px solid var(--border); }
+        .kpi b { display: block; font-family: var(--mono); font-size: 1.3rem; color: var(--primary); line-height: 1.1; }
+        .kpi b.o { color: var(--accent); }
+        .kpi span { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; line-height: 1.3; display: block; margin-top: 0.3rem; }
+        .pipeline { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; margin-bottom: 1.3rem; font-family: var(--mono); font-size: 0.72rem; }
+        .pipeline span { padding: 0.3rem 0.6rem; border-radius: 6px; background: rgba(0, 212, 255, 0.08); color: var(--primary); }
+        .pipeline em { color: var(--text-muted); font-style: normal; }
+        .featured-links { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+        .featured-links .btn { padding: 0.7rem 1.2rem; font-size: 0.9rem; }
+
         /* ---------- Education ---------- */
         .edu-track { position: relative; max-width: 900px; margin: 0 auto; }
         .edu-track::before { content: ''; position: absolute; left: 27px; top: 10px; bottom: 10px; width: 2px; background: linear-gradient(var(--primary), var(--accent), transparent); }
@@ -399,6 +431,8 @@
             .hero-grid { grid-template-columns: 1fr; }
             .hero-visual { max-width: 290px; }
             .exp-wrap { grid-template-columns: 1fr; }
+            .featured { grid-template-columns: 1fr; }
+            .featured-map { border-right: none; border-bottom: 1px solid var(--border); }
             .exp-tabs { flex-direction: row; overflow-x: auto; padding-bottom: 0.4rem; scrollbar-width: thin; }
             .exp-tab { flex: 0 0 auto; border-left: 1px solid transparent; border-bottom: 3px solid rgba(0, 212, 255, 0.15); }
             .exp-tab.active { border-left: 1px solid var(--border); border-bottom: 3px solid var(--primary); }
@@ -411,7 +445,8 @@
             .hero-stats { grid-template-columns: repeat(2, 1fr); }
             .snapshot { grid-template-columns: 1fr; }
             .cards { grid-template-columns: 1fr; }
-            .exp-panel, .contact-info, .contact-form { padding: 1.5rem; }
+            .exp-panel, .contact-info, .contact-form, .featured-body { padding: 1.5rem; }
+            .kpi-row { grid-template-columns: 1fr 1fr; }
             .orbit-chip { font-size: 0.7rem; padding: 0.4rem 0.6rem; }
             .edu-item { grid-template-columns: 44px 1fr; gap: 1rem; }
             .edu-badge { width: 44px; height: 44px; font-size: 0.7rem; }
@@ -467,7 +502,7 @@
                 <p class="hero-description">
                     Aerospace engineer with an <strong>MSc in Engineering Management</strong> from Aston University, and hands-on experience on the
                     <strong>Airbus account at Capgemini Engineering</strong>, <strong>UAV quality systems at Asteria Aerospace</strong>, an internship at
-                    <strong>Hindustan Aeronautics Limited (HAL)</strong>, plus supply chain and inventory auditing roles.
+                    <strong>Hindustan Aeronautics Limited (HAL)</strong>, plus supply chain and inventory auditing roles. Recently built an <strong>airline route profitability dashboard</strong> from US DOT traffic data.
                 </p>
                 <div class="hero-cta">
                     <a href="#contact" class="btn btn-primary">
@@ -479,11 +514,15 @@
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
                         LinkedIn
                     </a>
+                    <a href="https://github.com/gauravmakam-creator" target="_blank" rel="noopener" class="btn btn-secondary" aria-label="GitHub profile">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                        GitHub
+                    </a>
                 </div>
                 <div class="hero-stats">
                     <div class="stat-item"><div class="stat-number"><span class="count" data-target="2">0</span>+</div><div class="stat-label">Years Experience</div></div>
                     <div class="stat-item"><div class="stat-number"><span class="count" data-target="5">0</span></div><div class="stat-label">Companies</div></div>
-                    <div class="stat-item"><div class="stat-number"><span class="count" data-target="3">0</span></div><div class="stat-label">Certifications</div></div>
+                    <div class="stat-item"><div class="stat-number"><span class="count" data-target="4">0</span></div><div class="stat-label">Key Projects</div></div>
                     <div class="stat-item"><div class="stat-number"><span class="count" data-target="8" data-decimals="1">0</span></div><div class="stat-label">IELTS Band</div></div>
                 </div>
             </div>
@@ -519,7 +558,7 @@
                 <div class="orbit-chip" style="top:8%; left:-4%;"><i></i>Airbus Account</div>
                 <div class="orbit-chip o" style="top:30%; right:-6%;"><i></i>UAV Quality Systems</div>
                 <div class="orbit-chip g" style="bottom:22%; left:-8%;"><i></i>HAL Intern</div>
-                <div class="orbit-chip" style="bottom:4%; right:4%;"><i></i>MSc · Aston</div>
+                <div class="orbit-chip" style="bottom:4%; right:4%;"><i></i>Airline Data Analytics</div>
             </div>
         </div>
         <a href="#about" class="scroll-hint" aria-label="Scroll down"><span class="mouse"></span>SCROLL</a>
@@ -716,6 +755,12 @@
             <span class="skill-chip" data-cat="data">Data Analysis</span>
             <span class="skill-chip" data-cat="data scm">SAP (ERP)</span>
             <span class="skill-chip" data-cat="data">Microsoft Office</span>
+            <span class="skill-chip" data-cat="data">DuckDB</span>
+            <span class="skill-chip" data-cat="data">Pandas</span>
+            <span class="skill-chip" data-cat="data">React</span>
+            <span class="skill-chip" data-cat="data">D3 (Geo)</span>
+            <span class="skill-chip" data-cat="data">GitHub Actions</span>
+            <span class="skill-chip" data-cat="data aviation">Airline Network Analysis</span>
             <span class="skill-chip" data-cat="scm">Procurement</span>
             <span class="skill-chip" data-cat="scm">Vendor Management</span>
             <span class="skill-chip" data-cat="scm">Inventory Auditing</span>
@@ -741,7 +786,46 @@
         <div class="section-header">
             <span class="section-tag">Projects</span>
             <h2>Featured <span class="grad">work</span></h2>
-            <p class="section-subtitle">Hands-on engineering projects demonstrating technical expertise and innovation</p>
+            <p class="section-subtitle">Data analytics and hands-on engineering projects demonstrating technical depth and innovation</p>
+        </div>
+        <div class="featured glass">
+            <div class="featured-map">
+                <svg viewBox="0 0 600 300" role="img" aria-label="Map of Alaska Airlines routes analysed, with hub-feeder routes highlighted">
+                    <g class="draw">
+<path class="rt" d="M306 140Q333 159 360 211M306 140Q214 165 121 271M343 197Q325 156 306 140M519 236Q413 146 306 140M333 214Q319 163 306 140M306 140Q318 162 329 209M558 174Q432 112 306 140M336 209Q321 161 306 140M305 150Q332 165 360 211M306 140Q306 156 306 190M131 279Q219 170 306 140M306 140Q424 119 541 183M129 273Q218 167 306 140M308 191Q307 156 306 140M333 214Q319 169 305 150M343 197Q324 162 305 150M306 140Q370 156 434 227M519 236Q426 191 333 214M329 209Q317 168 305 150M326 208Q316 161 306 140M163 71Q166 40 170 26M306 140Q376 154 446 228M327 207Q316 161 306 140M306 190Q432 136 558 174M306 140Q431 112 556 174M306 140Q395 121 485 168M398 178Q352 141 306 140M306 140Q439 105 572 166M305 150Q320 167 336 209M326 208Q441 149 556 174M114 268Q210 163 306 140M306 140Q372 150 437 213M491 197Q399 134 306 140M306 140Q428 115 550 178M360 174Q333 146 306 140M306 138Q333 158 360 211M434 227Q370 184 306 190M513 238Q409 148 306 140M331 207Q318 161 306 140M121 271Q142 135 163 71M163 71Q132 61 101 73M306 140Q404 137 503 210M525 247Q416 150 306 140M305 150Q412 151 519 236M336 209Q447 151 558 174M306 140Q423 119 539 183M306 190Q431 137 556 174M365 217Q336 161 306 140M243 85Q203 64 163 71M305 150Q423 123 541 183M305 150Q213 171 121 271M472 184Q389 131 306 140M306 190Q412 173 519 236M131 279Q218 175 305 150M360 211Q261 97 163 71M306 190Q423 144 541 183M306 140Q389 150 472 228M306 140Q308 154 310 184M331 139Q319 135 306 140M457 153Q382 119 306 140M333 214Q453 146 572 166M326 208Q316 168 305 150M305 150Q305 162 306 190M430 230Q368 158 306 140M343 197Q325 187 306 190M306 140Q378 134 449 181M326 208Q434 157 541 183M306 140Q400 125 493 179M333 214Q429 196 525 247M305 150Q217 173 129 273M333 214Q227 203 121 271M306 140Q419 127 532 198M306 140Q425 118 543 182M305 150Q369 161 434 227M306 140Q415 118 525 175M524 249Q415 151 306 140M306 190Q318 194 329 209M174 53Q168 58 163 71M333 214Q444 153 556 174M305 150Q439 109 572 166M129 273Q231 206 333 214M558 174Q445 153 333 214M305 150Q316 167 327 207M306 190Q395 146 485 168M333 214Q423 193 513 238M305 150Q414 156 524 249M333 214Q418 181 503 210M121 271Q214 164 306 138M326 208Q244 101 163 71M163 71Q147 137 131 279M305 150Q389 155 472 228M163 71Q234 81 305 150M556 174Q430 116 305 150M305 150Q431 116 558 174M333 214Q436 161 539 183M306 140Q313 153 319 180M306 140Q408 121 511 178M131 279Q232 209 333 214M305 150Q209 168 114 268M306 140Q322 143 338 160M306 140Q416 135 526 213M163 71Q156 76 150 89M305 150Q371 155 437 213M485 168Q395 126 305 150M127 21Q145 35 163 71M121 271Q224 201 326 208M121 271Q214 194 306 190M333 214Q319 195 306 190M388 202Q347 153 306 140M305 150Q398 139 491 197M306 140Q407 117 508 166M306 140Q375 130 443 171M306 140Q370 145 434 201M516 171Q411 117 306 140M343 197Q325 155 306 138M331 139Q332 163 333 214M114 268Q223 201 333 214M485 163Q395 119 306 140M306 140Q313 161 319 206M257 101Q210 68 163 71M129 273Q146 136 163 71M121 271Q215 194 308 191M326 208Q433 157 539 183M131 279Q220 199 308 191M82 55Q122 48 163 71M306 140Q335 134 364 149M163 71Q200 68 238 92M306 140Q372 150 438 214M306 140Q311 160 315 202M306 140Q404 125 502 182M310 184Q414 171 519 236M163 71Q130 44 97 43M306 190Q422 144 539 183M398 178Q351 146 305 150M343 197Q253 95 163 71M306 140Q272 101 238 92M517 245Q411 150 306 140M333 214Q320 196 308 191M306 140Q327 134 349 143M331 207Q318 167 305 150M326 208Q329 161 331 139M326 208Q316 194 306 190M333 214Q383 202 434 227M308 191Q317 195 326 208M306 140Q306 156 307 189M525 247Q415 155 305 150M306 140Q313 157 320 194M306 190Q439 129 572 166M338 160Q428 162 519 236M243 85Q250 89 257 101M306 140Q309 145 312 156M305 150Q404 142 503 210M305 150Q409 153 513 238M306 140Q314 140 323 146M129 273Q219 197 308 191M326 208Q335 199 343 197M114 268Q211 192 308 191M306 140Q279 104 251 93M129 273Q217 196 306 190M163 71Q189 66 216 80M525 247Q426 191 326 208M306 190Q333 190 360 211M129 273Q125 271 121 271M254 95Q280 105 306 140M333 214Q326 200 320 194M243 85Q248 88 254 95M238 92Q240 87 243 85M186 75Q174 69 163 71M558 174Q451 147 343 197M333 214Q338 202 343 197M243 85Q214 70 186 75M305 150Q306 163 308 191M308 191Q326 188 343 197M118 82Q140 68 163 71M305 150Q312 163 320 194M128 84Q145 71 163 71M216 80Q261 90 306 140M305 150Q341 136 378 148M360 211Q346 207 333 214M129 273Q228 203 326 208M24 118Q93 68 163 71M525 247Q415 178 306 190M243 85Q247 87 251 93M254 95Q256 97 257 101M513 238Q409 176 306 190M251 93Q252 93 254 95M257 101Q248 93 238 92M216 80Q229 78 243 85M516 171Q520 171 525 175M306 140Q282 109 257 101M186 75Q201 72 216 80"/>
+<path class="rt hubf" d="M306 140Q234 77 163 71M163 71Q234 77 306 140M306 140Q240 68 174 53M174 53Q240 68 306 140M306 140Q274 98 243 85M243 85Q274 98 306 140M323 146Q314 140 306 140M306 140Q304 145 301 157M305 150Q305 143 306 140M301 157Q304 145 306 140M306 140Q280 105 254 95M186 75Q246 83 306 140"/>
+<g class="ap"><circle cx="306" cy="140" r="1.6"/><circle cx="163" cy="71" r="1.6"/><circle cx="360" cy="211" r="1.6"/><circle cx="121" cy="271" r="1.6"/><circle cx="343" cy="197" r="1.6"/><circle cx="519" cy="236" r="1.6"/><circle cx="333" cy="214" r="1.6"/><circle cx="329" cy="209" r="1.6"/><circle cx="174" cy="53" r="1.6"/><circle cx="558" cy="174" r="1.6"/><circle cx="336" cy="209" r="1.6"/><circle cx="305" cy="150" r="1.6"/><circle cx="306" cy="190" r="1.6"/><circle cx="131" cy="279" r="1.6"/><circle cx="541" cy="183" r="1.6"/><circle cx="129" cy="273" r="1.6"/><circle cx="308" cy="191" r="1.6"/><circle cx="434" cy="227" r="1.6"/><circle cx="326" cy="208" r="1.6"/><circle cx="170" cy="26" r="1.6"/><circle cx="446" cy="228" r="1.6"/><circle cx="327" cy="207" r="1.6"/><circle cx="556" cy="174" r="1.6"/><circle cx="485" cy="168" r="1.6"/><circle cx="398" cy="178" r="1.6"/><circle cx="572" cy="166" r="1.6"/><circle cx="114" cy="268" r="1.6"/><circle cx="437" cy="213" r="1.6"/><circle cx="491" cy="197" r="1.6"/><circle cx="550" cy="178" r="1.6"/><circle cx="360" cy="174" r="1.6"/><circle cx="306" cy="138" r="1.6"/><circle cx="513" cy="238" r="1.6"/><circle cx="331" cy="207" r="1.6"/><circle cx="101" cy="73" r="1.6"/><circle cx="503" cy="210" r="1.6"/><circle cx="525" cy="247" r="1.6"/><circle cx="539" cy="183" r="1.6"/><circle cx="365" cy="217" r="1.6"/><circle cx="243" cy="85" r="1.6"/><circle cx="472" cy="184" r="1.6"/><circle cx="472" cy="228" r="1.6"/><circle cx="310" cy="184" r="1.6"/><circle cx="331" cy="139" r="1.6"/><circle cx="457" cy="153" r="1.6"/><circle cx="430" cy="230" r="1.6"/><circle cx="449" cy="181" r="1.6"/><circle cx="493" cy="179" r="1.6"/><circle cx="532" cy="198" r="1.6"/><circle cx="543" cy="182" r="1.6"/><circle cx="525" cy="175" r="1.6"/><circle cx="524" cy="249" r="1.6"/><circle cx="319" cy="180" r="1.6"/><circle cx="511" cy="178" r="1.6"/><circle cx="338" cy="160" r="1.6"/><circle cx="526" cy="213" r="1.6"/><circle cx="150" cy="89" r="1.6"/><circle cx="127" cy="21" r="1.6"/><circle cx="388" cy="202" r="1.6"/><circle cx="508" cy="166" r="1.6"/><circle cx="443" cy="171" r="1.6"/><circle cx="434" cy="201" r="1.6"/><circle cx="516" cy="171" r="1.6"/><circle cx="485" cy="163" r="1.6"/><circle cx="319" cy="206" r="1.6"/><circle cx="257" cy="101" r="1.6"/><circle cx="82" cy="55" r="1.6"/><circle cx="364" cy="149" r="1.6"/><circle cx="238" cy="92" r="1.6"/><circle cx="438" cy="214" r="1.6"/><circle cx="315" cy="202" r="1.6"/><circle cx="502" cy="182" r="1.6"/><circle cx="97" cy="43" r="1.6"/><circle cx="517" cy="245" r="1.6"/><circle cx="349" cy="143" r="1.6"/><circle cx="307" cy="189" r="1.6"/><circle cx="320" cy="194" r="1.6"/><circle cx="312" cy="156" r="1.6"/><circle cx="323" cy="146" r="1.6"/><circle cx="251" cy="93" r="1.6"/><circle cx="301" cy="157" r="1.6"/><circle cx="216" cy="80" r="1.6"/><circle cx="254" cy="95" r="1.6"/><circle cx="186" cy="75" r="1.6"/><circle cx="118" cy="82" r="1.6"/><circle cx="128" cy="84" r="1.6"/><circle cx="378" cy="148" r="1.6"/><circle cx="24" cy="118" r="1.6"/></g>
+<circle class="sea" cx="306" cy="140" r="5"/><text x="315" y="144" class="lbl">SEA</text>
+                    </g>
+                </svg>
+                <div class="map-legend"><span><i></i>Routes analysed</span><span><i class="o"></i>Hub-feeder routes</span></div>
+            </div>
+            <div class="featured-body">
+                <div class="featured-badge">★ FEATURED · DATA ANALYTICS</div>
+                <h3>Airline Traffic &amp; Route Profitability Analysis</h3>
+                <p>An end-to-end analysis of Alaska Airlines' (AS) domestic network built on US DOT / BTS public data (T-100 Domestic Segment, Jan 2025, and DB1B). It estimates each route's revenue and cost and compares <strong>standalone</strong> vs <strong>network</strong> contribution, showing which routes lose money on their own but pay off by feeding connecting passengers through Seattle. Results are presented in an interactive web dashboard.</p>
+                <div class="kpi-row">
+                    <div class="kpi"><b>431</b><span>Routes in capacity model</span></div>
+                    <div class="kpi"><b>2.35M</b><span>Passengers analysed</span></div>
+                    <div class="kpi"><b>380</b><span>Routes with revenue + cost</span></div>
+                    <div class="kpi"><b>88</b><span>Airports mapped</span></div>
+                    <div class="kpi"><b class="o">12</b><span>Hub-feeder routes found</span></div>
+                    <div class="kpi"><b class="o">$194.6M</b><span>Connecting-traffic revenue</span></div>
+                </div>
+                <div class="pipeline">
+                    <span>BTS T-100 + DB1B</span><em>→</em><span>DuckDB / SQL</span><em>→</em><span>Pandas</span><em>→</em><span>Revenue &amp; cost model</span><em>→</em><span>React + D3 dashboard</span>
+                </div>
+                <ul class="card-list" style="margin-bottom:1.3rem;">
+                    <li>Built per-route capacity (flights, seats, passengers, load factor) from T-100 data</li>
+                    <li>Split DB1B fares into local (nonstop) vs flow (connecting) revenue per route</li>
+                    <li>Estimated fuel cost bottom-up by aircraft type, plus a stage-length-adjusted cost model</li>
+                    <li>Deployed the dashboard (route map, KPIs, route table) via GitHub Actions to GitHub Pages</li>
+                </ul>
+                <div class="featured-links">
+                    <a href="https://gauravmakam-creator.github.io/gauravmakam-airline-dashboard/" target="_blank" rel="noopener" class="btn btn-primary">Live Dashboard ↗</a>
+                    <a href="https://github.com/gauravmakam-creator/gauravmakam-airline-dashboard" target="_blank" rel="noopener" class="btn btn-secondary">View Code</a>
+                </div>
+            </div>
         </div>
         <div class="cards stagger">
             <div class="project-card card glass tilt">
@@ -912,6 +996,14 @@
                     </div>
                 </a>
 
+                <a href="https://github.com/gauravmakam-creator" target="_blank" rel="noopener" class="contact-item">
+                    <div class="contact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></div>
+                    <div class="contact-item-text">
+                        <span class="contact-item-label">GitHub</span>
+                        <span class="contact-item-value">github.com/gauravmakam-creator</span>
+                    </div>
+                </a>
+
                 <div class="contact-item">
                     <div class="contact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
                     <div class="contact-item-text">
@@ -954,6 +1046,8 @@
         <div class="footer-links">
             <a href="mailto:gauravmakam2@gmail.com">Email</a>
             <a href="https://www.linkedin.com/in/gaurav-makam" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://github.com/gauravmakam-creator" target="_blank" rel="noopener">GitHub</a>
+            <a href="#projects">Projects</a>
             <a href="#experience">Experience</a>
             <a href="#contact">Contact</a>
         </div>
@@ -1002,7 +1096,7 @@
         }));
 
         /* ---- Typed roles ---- */
-        const roles = ['Aerospace Engineer', 'Engineering Management Professional', 'Quality Assurance Specialist', 'Supply Chain & Operations', 'Project & Risk Management'];
+        const roles = ['Aerospace Engineer', 'Airline Data Analyst', 'Engineering Management Professional', 'Quality Assurance Specialist', 'Supply Chain & Operations', 'Project & Risk Management'];
         const typed = $('#typed');
         if (!reduceMotion) {
             let r = 0, i = roles[0].length, deleting = true;
