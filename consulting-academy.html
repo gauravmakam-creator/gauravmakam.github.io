@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulting Case Academy</title>
+    <meta name="description" content="Game-based learning modules for engineering consultants, built on published BCG case studies and frameworks.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #00d4ff;
+            --primary-dark: #0099cc;
+            --accent: #ff6b35;
+            --good: #3ddc97;
+            --warn: #ffc857;
+            --bad: #ff5d73;
+            --bg-dark: #0a0e1a;
+            --bg-medium: #0f1729;
+            --bg-light: #1a2540;
+            --text-primary: #ffffff;
+            --text-secondary: #a8b2c8;
+            --text-muted: #6c7a93;
+            --border: rgba(0, 212, 255, 0.15);
+            --glow: rgba(0, 212, 255, 0.3);
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: radial-gradient(ellipse at top, var(--bg-medium) 0%, var(--bg-dark) 70%) fixed;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        a { color: var(--primary); }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Top bar */
+        header {
+            position: sticky; top: 0; z-index: 10;
+            background: rgba(10, 14, 26, 0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+        .bar {
+            max-width: 1100px; margin: 0 auto; padding: 0.8rem 16px;
+            display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+        }
+        .brand { font-weight: 700; font-size: 1.1rem; cursor: pointer; }
+        .brand span { color: var(--primary); }
+        .back { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; }
+        .back:hover { color: var(--primary); }
+        .xpbox { margin-left: auto; display: flex; align-items: center; gap: 0.75rem; min-width: 220px; }
+        .rank { font-size: 0.8rem; color: var(--warn); font-weight: 600; white-space: nowrap; }
+        .xptrack { flex: 1; height: 8px; background: var(--bg-light); border-radius: 4px; overflow: hidden; min-width: 80px; }
+        .xpfill { height: 100%; width: 0; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width 0.6s; }
+        .xpnum { font-size: 0.8rem; color: var(--text-secondary); white-space: nowrap; }
+
+        main { max-width: 1100px; margin: 0 auto; padding: 2rem 16px 4rem; }
+
+        /* Home */
+        .hero h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); line-height: 1.15; margin-bottom: 0.75rem; }
+        .hero h1 em { font-style: normal; color: var(--primary); }
+        .hero p { color: var(--text-secondary); max-width: 720px; }
+        .howto { display: flex; gap: 0.5rem 1.5rem; flex-wrap: wrap; margin: 1.5rem 0 2rem; font-size: 0.9rem; color: var(--text-secondary); }
+        .howto b { color: var(--text-primary); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem; }
+        .card {
+            background: linear-gradient(160deg, var(--bg-light), var(--bg-medium));
+            border: 1px solid var(--border); border-radius: 14px; padding: 1.4rem;
+            display: flex; flex-direction: column; gap: 0.6rem;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+        .card:hover { transform: translateY(-3px); border-color: var(--primary); box-shadow: 0 8px 30px rgba(0, 212, 255, 0.12); }
+        .card .num { font-size: 0.75rem; color: var(--primary); letter-spacing: 0.1em; }
+        .card h3 { font-size: 1.25rem; }
+        .card .case { font-size: 0.85rem; color: var(--accent); }
+        .card p { font-size: 0.9rem; color: var(--text-secondary); flex: 1; }
+        .meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted); }
+        .stars { color: var(--warn); letter-spacing: 2px; }
+        .badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 2.5rem; }
+        .badge { border: 1px solid var(--border); border-radius: 20px; padding: 0.3rem 0.8rem; font-size: 0.8rem; color: var(--text-muted); }
+        .badge.on { border-color: var(--warn); color: var(--warn); }
+
+        /* Buttons */
+        .btn {
+            font: inherit; font-weight: 600; cursor: pointer; border-radius: 8px;
+            padding: 0.7rem 1.3rem; border: 1px solid var(--primary);
+            background: var(--primary); color: var(--bg-dark); transition: all 0.2s;
+        }
+        .btn:hover { background: transparent; color: var(--primary); }
+        .btn.ghost { background: transparent; color: var(--primary); }
+        .btn.ghost:hover { background: rgba(0, 212, 255, 0.1); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .row { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-top: 1.25rem; }
+
+        /* Module player */
+        .mhead { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+        .mhead h2 { font-size: 1.5rem; }
+        .mscore { font-size: 0.85rem; color: var(--text-secondary); }
+        .progress { display: flex; gap: 4px; margin-bottom: 1.5rem; }
+        .progress i { flex: 1; height: 4px; border-radius: 2px; background: var(--bg-light); }
+        .progress i.done { background: var(--primary); }
+        .progress i.cur { background: var(--accent); }
+
+        .panel {
+            background: var(--bg-medium); border: 1px solid var(--border); border-radius: 14px;
+            padding: clamp(1.1rem, 3vw, 2rem); animation: rise 0.35s ease;
+        }
+        @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+        .tag { display: inline-block; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
+        .panel h3 { font-size: 1.3rem; margin-bottom: 0.75rem; }
+        .panel p, .panel li { color: var(--text-secondary); }
+        .panel p + p { margin-top: 0.75rem; }
+        .panel ul { margin: 0.75rem 0 0 1.2rem; }
+        .panel li { margin-bottom: 0.4rem; }
+        .panel strong { color: var(--text-primary); }
+        .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; margin-top: 1.25rem; }
+        .fact { background: var(--bg-light); border-radius: 10px; padding: 0.8rem; }
+        .fact b { display: block; font-size: 1.3rem; color: var(--primary); }
+        .fact span { font-size: 0.8rem; color: var(--text-secondary); }
+
+        .opts { display: grid; gap: 0.6rem; margin-top: 1rem; }
+        .opt {
+            font: inherit; text-align: left; cursor: pointer; color: var(--text-primary);
+            background: var(--bg-light); border: 1px solid var(--border); border-radius: 10px;
+            padding: 0.85rem 1rem; transition: border-color 0.15s, background 0.15s;
+        }
+        .opt:hover:not(:disabled) { border-color: var(--primary); }
+        .opt:disabled { cursor: default; }
+        .opt.right { border-color: var(--good); background: rgba(61, 220, 151, 0.12); }
+        .opt.wrong { border-color: var(--bad); background: rgba(255, 93, 115, 0.12); }
+        .opt.part { border-color: var(--warn); background: rgba(255, 200, 87, 0.1); }
+        .fb { margin-top: 1rem; padding: 1rem; border-radius: 10px; border-left: 3px solid var(--primary); background: rgba(0, 212, 255, 0.06); }
+        .fb.good { border-color: var(--good); }
+        .fb.bad { border-color: var(--bad); }
+        .fb.part { border-color: var(--warn); }
+        .fb .hist { margin-top: 0.6rem; font-size: 0.9rem; }
+        .fb .hist b { color: var(--warn); }
+
+        /* Classify */
+        .items { display: grid; gap: 0.6rem; margin-top: 1rem; }
+        .item { background: var(--bg-light); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem 1rem; }
+        .item .lbl { font-weight: 600; }
+        .item .sub { font-size: 0.82rem; color: var(--text-muted); }
+        .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+        .chip {
+            font: inherit; font-size: 0.8rem; cursor: pointer; border-radius: 20px; padding: 0.3rem 0.75rem;
+            border: 1px solid var(--border); background: transparent; color: var(--text-secondary);
+        }
+        .chip.sel { background: var(--primary); color: var(--bg-dark); border-color: var(--primary); }
+        .chip.right { background: var(--good); border-color: var(--good); color: var(--bg-dark); }
+        .chip.wrong { background: var(--bad); border-color: var(--bad); color: var(--bg-dark); }
+        .item .why { font-size: 0.85rem; margin-top: 0.5rem; color: var(--text-secondary); }
+
+        /* Charts */
+        .chart { width: 100%; height: auto; margin-top: 1rem; background: var(--bg-dark); border-radius: 10px; border: 1px solid var(--border); }
+        .chart text { fill: var(--text-secondary); font-family: 'Space Grotesk', sans-serif; }
+        .sliders { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .sliders label { font-size: 0.85rem; color: var(--text-secondary); display: block; }
+        .sliders output { color: var(--primary); font-weight: 600; }
+        input[type=range] { width: 100%; accent-color: var(--primary); }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.88rem; }
+        th, td { text-align: right; padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--border); }
+        th:first-child, td:first-child { text-align: left; }
+        th { color: var(--text-muted); font-weight: 500; }
+        .tablewrap { overflow-x: auto; }
+        .pos { color: var(--good); }
+        .neg { color: var(--bad); }
+
+        /* Boss */
+        .timer { font-size: 2rem; font-weight: 700; color: var(--accent); }
+        .timerbar { height: 6px; background: var(--bg-light); border-radius: 3px; overflow: hidden; margin: 0.5rem 0 1rem; }
+        .timerbar div { height: 100%; background: var(--accent); transition: width 1s linear; }
+
+        .result { text-align: center; }
+        .result .big { font-size: 3rem; color: var(--warn); letter-spacing: 6px; }
+        .result p { margin-top: 0.5rem; }
+
+        footer { max-width: 1100px; margin: 0 auto; padding: 0 16px 3rem; font-size: 0.8rem; color: var(--text-muted); }
+        footer ol { margin: 0.5rem 0 0 1.2rem; }
+
+        .toast {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(120px);
+            background: var(--bg-light); border: 1px solid var(--warn); color: var(--warn);
+            padding: 0.6rem 1.2rem; border-radius: 30px; font-weight: 600; transition: transform 0.3s, opacity 0.3s; z-index: 20; opacity: 0;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        @media (max-width: 600px) {
+            .xpbox { margin-left: 0; width: 100%; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="bar">
+            <div class="brand" id="homeLink">Case <span>Academy</span></div>
+            <a class="back" href="index.html">← Portfolio</a>
+            <div class="xpbox">
+                <span class="rank" id="rank">Analyst</span>
+                <div class="xptrack"><div class="xpfill" id="xpfill"></div></div>
+                <span class="xpnum mono" id="xpnum">0 XP</span>
+            </div>
+        </div>
+    </header>
+
+    <main id="app"></main>
+
+    <footer id="sources">
+        <p><strong>Sources.</strong> The cases come from published BCG work and the public record. Scenarios marked "Scenario" are made-up practice cases built on those frameworks. This site is not affiliated with Boston Consulting Group.</p>
+        <ol>
+            <li>B. Henderson, "The Product Portfolio," BCG Perspectives (1970).</li>
+            <li>B. Henderson, "The Experience Curve Reviewed," BCG Perspectives (1973–74); T.P. Wright, "Factors Affecting the Cost of Airplanes," Journal of the Aeronautical Sciences (1936).</li>
+            <li>BCG, <em>Strategy Alternatives for the British Motorcycle Industry</em>, HMSO (1975); R. Pascale, "Perspectives on Strategy: The Real Story Behind Honda's Success," California Management Review (1984).</li>
+            <li>G. Stalk Jr., "Time—The Next Source of Competitive Advantage," Harvard Business Review (Jul–Aug 1988).</li>
+            <li>G. Stalk, P. Evans, L. Shulman, "Competing on Capabilities," HBR (Mar–Apr 1992); P. Evans, T. Wurster, "Strategy and the New Economics of Information," HBR (Sep–Oct 1997).</li>
+        </ol>
+    </footer>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+    // ---------- Persistence ----------
+    const STORE_KEY = 'caseAcademy.v1';
+    function load() {
+        try { return JSON.parse(localStorage.getItem(STORE_KEY)) || { xp: 0, best: {} }; }
+        catch (e) { return { xp: 0, best: {} }; }
+    }
+    function save() {
+        try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ }
+    }
+    const state = load();
+
+    const RANKS = [
+        [0, 'Analyst'], [150, 'Associate'], [350, 'Consultant'],
+        [600, 'Project Leader'], [900, 'Principal'], [1250, 'Partner']
+    ];
+    function rankFor(xp) {
+        let r = RANKS[0], next = null;
+        for (let i = 0; i < RANKS.length; i++) {
+            if (xp >= RANKS[i][0]) { r = RANKS[i]; next = RANKS[i + 1] || null; }
+        }
+        return { name: r[1], floor: r[0], next };
+    }
+    function renderXP() {
+        const r = rankFor(state.xp);
+        document.getElementById('rank').textContent = r.name;
+        document.getElementById('xpnum').textContent = state.xp + ' XP';
+        const pct = r.next ? (state.xp - r.floor) / (r.next[0] - r.floor) * 100 : 100;
+        document.getElementById('xpfill').style.width = pct + '%';
+    }
+    function toast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(toast._t);
+        toast._t = setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    const $ = (html) => { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstElementChild; };
+    const app = document.getElementById('app');
+    const fmt = (n, d = 0) => Number(n).toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
+
+    // ---------- Experience-curve maths ----------
+    const unitCost = (c1, n, rate) => c1 * Math.pow(n, Math.log2(rate));
+
+    // ---------- Module content ----------
+    const MODULES = [
+    {
+        id: 'm1', title: 'Portfolio Triage', badge: 'Matrix Master',
+        case: 'BCG Growth-Share Matrix (1970)',
+        blurb: 'Sort an aerospace group\'s business units into Stars, Cash Cows, Question Marks and Dogs, then decide where the capital goes.',
+        stages: [
+            { type: 'brief', tag: 'Case briefing', title: 'Bruce Henderson\'s portfolio idea',
+              html: `<p>In 1970 BCG founder <strong>Bruce Henderson</strong> published "The Product Portfolio." His point was that a diversified company should run its businesses as a <strong>portfolio of cash flows</strong>, not judge each one alone.</p>
+                     <p>Two measures do the sorting. <strong>Market growth</strong> shows how much cash a business needs to keep its position. <strong>Relative market share</strong> (your share ÷ the largest competitor's share) stands in for cost position, because of the experience curve you'll meet in Module 2.</p>
+                     <ul><li><strong>Stars</strong>: high growth, high share. Invest to hold the lead.</li>
+                     <li><strong>Cash Cows</strong>: low growth, high share. Harvest the cash to fund the others.</li>
+                     <li><strong>Question Marks</strong>: high growth, low share. Invest hard to win the segment, or get out.</li>
+                     <li><strong>Dogs</strong>: low growth, low share. Restructure, keep for cash, or divest.</li></ul>`,
+              facts: [['1970', 'Matrix published'], ['1.0×', 'Usual relative-share cut-off'], ['~10%', 'Usual growth cut-off']] },
+            { type: 'classify', tag: 'Scenario · Aurora Aerospace Group', title: 'Classify the portfolio',
+              prompt: 'You\'re on the corporate strategy team. Put each unit in its quadrant. Cut-offs: 10% market growth and 1.0× relative share.',
+              cats: ['Star', 'Cash Cow', 'Question Mark', 'Dog'],
+              items: [
+                { label: 'Composite aerostructures', sub: 'Growth 14% · Rel. share 1.8× · Rev $1.2B', cat: 'Star', g: 14, s: 1.8, r: 1.2, why: 'Fast market and you lead it. Fund the capacity ramp.' },
+                { label: 'Military rotorcraft gearboxes', sub: 'Growth 2% · Rel. share 2.6× · Rev $0.9B', cat: 'Cash Cow', g: 2, s: 2.6, r: 0.9, why: 'Mature programs with a dominant position. Classic cash generator.' },
+                { label: 'eVTOL electric propulsion', sub: 'Growth 28% · Rel. share 0.3× · Rev $0.1B', cat: 'Question Mark', g: 28, s: 0.3, r: 0.1, why: 'Hot market, but you trail the leader badly. Back it heavily or exit.' },
+                { label: 'Legacy hydraulic actuators', sub: 'Growth 1% · Rel. share 0.4× · Rev $0.3B', cat: 'Dog', g: 1, s: 0.4, r: 0.3, why: 'Shrinking tech with a weak position. A divestiture candidate.' },
+                { label: 'Small-sat buses', sub: 'Growth 19% · Rel. share 1.4× · Rev $0.6B', cat: 'Star', g: 19, s: 1.4, r: 0.6, why: 'Leadership in a fast market. Keep investing to hold share as it matures.' },
+                { label: 'Aftermarket MRO services', sub: 'Growth 4% · Rel. share 2.1× · Rev $1.5B', cat: 'Cash Cow', g: 4, s: 2.1, r: 1.5, why: 'Large installed base with steady, high-margin cash.' },
+                { label: 'Commercial cabin interiors', sub: 'Growth 3% · Rel. share 0.6× · Rev $0.4B', cat: 'Dog', g: 3, s: 0.6, r: 0.4, why: 'Low growth and a follower position. Fix it or sell it.' },
+                { label: 'Hydrogen fuel systems', sub: 'Growth 35% · Rel. share 0.15× · Rev $0.05B', cat: 'Question Mark', g: 35, s: 0.15, r: 0.05, why: 'An early market with no clear leader yet. Place a bet you can afford, with stage gates.' }
+              ],
+              after: 'matrix' },
+            { type: 'quiz', tag: 'Capital allocation', q: 'The CFO has $400M of free cash this year. Which allocation follows the logic of the matrix?',
+              opts: ['Spread it evenly across all eight units so no one feels left out',
+                     'Take cash from MRO and gearboxes; fund aerostructures, small-sat and one chosen Question Mark; review both Dogs for sale',
+                     'Put it all into the hydrogen unit because it has the fastest growth',
+                     'Put it back into MRO because it has the highest revenue'],
+              a: 1, why: 'Cash Cows pay for Stars and for a <strong>selective</strong> bet on Question Marks. Spreading money evenly is the "peanut butter" mistake the matrix was built to prevent. Backing every Question Mark at once usually leaves none of them big enough to win.' },
+            { type: 'quiz', tag: 'Concept check', q: 'Why does the matrix use relative market share instead of absolute share?',
+              opts: ['It\'s easier to calculate',
+                     'Share versus the largest competitor stands in for relative cumulative experience, and so for relative cost position',
+                     'Absolute share is illegal to publish',
+                     'Relative share predicts how fast the market grows'],
+              a: 1, why: 'Henderson tied share to the <strong>experience curve</strong>. The share leader has usually built the most cumulative volume, so it has the lowest costs and the most cash to spare.' },
+            { type: 'quiz', tag: 'Consultant judgement', q: 'A client calls a unit a "Dog," but it supplies a critical part to their biggest Star. What should you say?',
+              opts: ['Divest it right away; the matrix says so',
+                     'The matrix is a starting point. Check the links between units, such as supply security, shared costs and customer bundles, before you divest',
+                     'Reclassify it as a Star',
+                     'Ignore the matrix completely'],
+              a: 1, why: 'BCG itself warned against using the matrix mechanically. In engineering-heavy groups, <strong>shared technology and supply chains</strong> often make a weak unit strategically important.' },
+            { type: 'takeaways', items: [
+                'Run the corporation as a portfolio of cash uses and cash sources.',
+                'Relative share stands in for relative cost position, which is the experience curve again.',
+                'Don\'t spread capital evenly. Concentrate it on the places you can win.',
+                'Check the links between units before you act on a quadrant label.'] }
+        ]
+    },
+    {
+        id: 'm2', title: 'Learning Curve Lab', badge: 'Cost Curve Pilot',
+        case: 'BCG Experience Curve & Wright\'s Law',
+        blurb: 'Model the experience curve from Wright\'s 1936 aircraft study, then run a pricing war like the semiconductor companies BCG studied.',
+        stages: [
+            { type: 'brief', tag: 'Case briefing', title: 'From airplane factories to strategy',
+              html: `<p>In 1936 aeronautical engineer <strong>T.P. Wright</strong> found that the labour hours to build an airplane fell by a steady percentage every time cumulative output doubled. This is the "learning curve."</p>
+                     <p>In the mid-1960s BCG widened the idea to <strong>total cost</strong> (labour, scale, process and design improvements) and named it the <strong>experience curve</strong>. In its studies of semiconductors and other industries, unit costs fell about <strong>20–30% with each doubling</strong> of cumulative volume.</p>
+                     <p>The strategic point: if costs follow volume, the company that builds volume fastest gets the lowest cost. Some semiconductor makers, notably <strong>Texas Instruments</strong>, priced ahead of their current costs to win share.</p>
+                     <p class="mono" style="margin-top:1rem;color:var(--primary)">Cost(n) = Cost(1) × n<sup>log₂(rate)</sup></p>`,
+              facts: [['1936', 'Wright\'s aircraft paper'], ['80%', 'Wright\'s labour curve'], ['20–30%', 'BCG cost drop per doubling']] },
+            { type: 'explorer' },
+            { type: 'quiz', tag: 'Calculation', q: 'A satellite thruster costs $100k for the first unit and follows an 85% experience curve. Roughly what does unit 64 cost?',
+              opts: ['$85k', '$51k', '$38k', '$15k'], a: 2,
+              why: '64 = 2<sup>6</sup>, so that\'s six doublings: 100 × 0.85<sup>6</sup> ≈ <strong>$37.7k</strong>. A useful shortcut is to count doublings, not units.' },
+            { type: 'quiz', tag: 'Calculation', q: 'Unit 1 of a wing assembly takes 10,000 labour hours on Wright\'s 80% curve. How many hours does unit 8 take?',
+              opts: ['8,000', '6,400', '5,120', '2,000'], a: 2,
+              why: 'Three doublings: 10,000 × 0.8³ = <strong>5,120 hours</strong>. This is why first-article costs on new aircraft programs look so bad.' },
+            { type: 'quiz', tag: 'Concept check', q: 'Which of these is NOT a driver BCG put behind the experience curve?',
+              opts: ['Labour efficiency and learning', 'Process innovation and specialisation', 'Product redesign and standardisation', 'General price inflation'], a: 3,
+              why: 'The effect comes from learning, scale, process change and redesign, and it\'s measured in <strong>constant currency</strong>. Inflation is removed before plotting.' },
+            { type: 'sim' },
+            { type: 'quiz', tag: 'Consultant judgement', q: 'When does a "price ahead of cost" strategy fail?',
+              opts: ['When the market is growing fast',
+                     'When a technology shift resets the curve, or a competitor can match your volume',
+                     'When your costs follow a steep curve',
+                     'When you have the most cumulative volume'],
+              a: 1, why: 'Experience is only worth something while it applies. A new technology generation can make a rival\'s learning irrelevant. If the market isn\'t growing, buying share costs too much to ever pay back.' },
+            { type: 'takeaways', items: [
+                'Count doublings: each one cuts cost by (1 − rate).',
+                'Volume now means lower cost later. In growing markets, share is worth buying.',
+                'A technology shift can reset the curve, so watch for discontinuities.',
+                'Aircraft programs still use Wright\'s curve for bids and break-even estimates.'] }
+        ]
+    },
+    {
+        id: 'm3', title: 'Bikes of Britain', badge: 'Strategy Historian',
+        case: 'BCG for the UK Government, 1975',
+        blurb: 'Advise the British government as Honda takes over world motorcycle markets. Make the calls, then see what really happened.',
+        stages: [
+            { type: 'brief', tag: 'Case briefing', title: 'The collapse of an industry',
+              html: `<p>In the 1950s, British makers such as <strong>Triumph, BSA and Norton</strong> were big names in world motorcycling. By the early 1970s, Japanese makers led by <strong>Honda</strong> had taken most of the market. In 1975 the UK government hired BCG to explain why and to set out strategy alternatives.</p>
+                     <p>The report, <em>Strategy Alternatives for the British Motorcycle Industry</em>, became one of the most cited documents in strategy teaching.</p>
+                     <p>You are the engagement manager. Make five calls. Each one is scored on how well it matches the analysis and on what happened next.</p>`,
+              facts: [['1975', 'Report to HM Government'], ['3', 'Main British marques'], ['5', 'Decisions you\'ll make']] },
+            { type: 'branch', tag: 'Decision 1 · Diagnosis', q: 'The minister asks why the British lost. What is your headline answer?',
+              opts: [
+                { t: 'Japanese labour is cheaper', pts: 3, fb: 'Partly true, but not the core finding. Wage gaps alone couldn\'t explain the gap in productivity.' },
+                { t: 'Japanese makers built huge volume in small bikes, rode the experience curve down, and then used their cost advantage to move into bigger bikes', pts: 10, fb: 'That\'s the core of BCG\'s diagnosis: scale and cumulative volume drove cost, which made the next step up affordable.' },
+                { t: 'British designs were simply out of fashion', pts: 2, fb: 'Styling mattered at the edges. The structural problem was cost and productivity.' } ],
+              hist: 'BCG found that the Japanese advantage came from <b>volume-driven productivity, automation and market-share strategy</b>, not from cheap labour.' },
+            { type: 'branch', tag: 'Decision 2 · Evaluate the incumbents\' move', q: 'British makers have abandoned small and mid-size bikes to focus on big machines. Is that a safe place to stand?',
+              opts: [
+                { t: 'Yes. Premium big bikes are a defensible niche.', pts: 2, fb: 'That was the industry\'s hope. But a niche protected only by habit falls quickly to a lower-cost competitor.' },
+                { t: 'No. It\'s a "segment retreat." Giving up volume weakens the cost position, and the Japanese will follow you up-market.', pts: 10, fb: 'Correct. Each retreat lowered British volume and raised unit cost, and Japanese makers then launched large bikes as well.' },
+                { t: 'It depends only on import tariffs', pts: 4, fb: 'Tariffs could buy time, but they don\'t fix a structural cost gap.' } ],
+              hist: 'The report described this pattern of <b>segment retreat</b>. Japanese makers entered the large-bike market, for example with Honda\'s CB750 in 1969.' },
+            { type: 'branch', tag: 'Decision 3 · Recommendation', q: 'Which strategic posture do you put in front of the government?',
+              opts: [
+                { t: 'Harvest: maximise short-term cash and manage a controlled decline', pts: 6, fb: 'A legitimate option, and the report laid out alternatives like this one. But it means the industry eventually exits.' },
+                { t: 'Rebuild cost competitiveness: major investment in new models and modern volume production, focused where volume can actually be reached', pts: 10, fb: 'The analysis implied that survival meant closing the cost gap, which needed substantial investment and volume, not just a new niche.' },
+                { t: 'Attack every segment at once with the current plants', pts: 1, fb: 'Without a cost base to support it, an all-out attack would only speed up the losses.' } ],
+              hist: 'The money for a turnaround on that scale <b>did not arrive</b>. Norton-Villiers-Triumph collapsed in the late 1970s, and the Meriden workers\' cooperative ended in 1983.' },
+            { type: 'branch', tag: 'Decision 4 · The "Honda Effect" debate', q: 'In 1984, Richard Pascale interviewed the Honda executives who opened the US market. They said they arrived planning to sell big bikes. Those leaked oil and failed under hard US riding, and buyers noticed the little 50cc Super Cubs the team rode around Los Angeles instead. What do you conclude?',
+              opts: [
+                { t: 'Strategy is purely analytical. The emergent story is irrelevant.', pts: 2, fb: 'That ignores what really happened. Honda\'s success involved a lot of learning and adapting along the way.' },
+                { t: 'BCG\'s analysis was completely wrong', pts: 3, fb: 'Too strong. The cost and volume economics BCG described were real. They just weren\'t a plan made in advance.' },
+                { t: 'Both views hold: the economics explain why Honda won, but how it got there came from learning on the ground. Pair the analysis with fast experiments.', pts: 10, fb: 'This is the balanced reading most strategy courses teach today. Henry Mintzberg and others used the case to argue for "emergent" strategy.' } ],
+              hist: 'Pascale\'s article started a long debate between <b>designed and emergent strategy</b>. It\'s still taught alongside the BCG report.' },
+            { type: 'branch', tag: 'Decision 5 · Epilogue', q: 'Property developer John Bloor bought the Triumph name in 1983, and new bikes came out of Hinckley in 1990. What engineering choice was central to the revival?',
+              opts: [
+                { t: 'Copying the 1960s designs for nostalgia buyers', pts: 2, fb: 'Heritage helped the brand, but the comeback rested on modern engineering.' },
+                { t: 'Modular engine and chassis platforms shared across models, built with modern production methods', pts: 10, fb: 'Shared modules spread volume across a whole range, which is the experience-curve idea at work inside a product line.' },
+                { t: 'Undercutting Japanese prices at any cost', pts: 1, fb: 'A small new entrant couldn\'t win a price war against scale leaders.' } ],
+              hist: 'The new Triumph line used a <b>modular design</b> of three- and four-cylinder engines with shared parts, a good example of platform strategy for engineers.' },
+            { type: 'takeaways', items: [
+                'Diagnose the cost structure before you blame wages or fashion.',
+                'Retreating to a segment trades away volume, and volume drives cost.',
+                'Analysis explains why you win. Fast learning on the ground shapes how you win.',
+                'Platforms and modularity let a small producer build volume across a range.'] }
+        ]
+    },
+    {
+        id: 'm4', title: 'Clock Speed', badge: 'Time Bandit',
+        case: 'Time-Based Competition (Stalk, 1988)',
+        blurb: 'Map the waste in an aerospace repair process, find the time traps, and replay the Honda–Yamaha war.',
+        stages: [
+            { type: 'brief', tag: 'Case briefing', title: 'Time is the next source of advantage',
+              html: `<p>In his 1988 HBR article, BCG's <strong>George Stalk Jr.</strong> argued that Japanese leaders had moved on from low wages, to scale, to focused factories, to flexible manufacturing, and finally to <strong>time</strong>.</p>
+                     <p>His sharpest example was the <strong>H-Y War</strong>. In 1981 Yamaha announced plans to overtake Honda. Honda answered with a stream of new models, introducing or replacing <strong>113 models in 18 months</strong> while Yamaha managed 37. Honda's speed made Yamaha's bikes look old, and Yamaha publicly backed down.</p>
+                     <p>Stalk also wrote down a set of rules of thumb, which you'll use in this module.</p>`,
+              facts: [['113', 'Honda model changes'], ['37', 'Yamaha model changes'], ['18 mo', 'Length of the H-Y War']] },
+            { type: 'classify', tag: 'Scenario · Turbine blade repair shop', title: 'Value-add or waiting?',
+              prompt: 'A blade repair takes 300 hours from start to finish. Tag each step as Value-add (it physically changes the part in a way the customer pays for) or Non-value-add.',
+              cats: ['Value-add', 'Non-value-add'],
+              items: [
+                { label: 'Sit in receiving queue', sub: '72 h', cat: 'Non-value-add', h: 72, why: 'Pure waiting.' },
+                { label: 'Strip coating chemically', sub: '3 h', cat: 'Value-add', h: 3, why: 'Physically prepares the part.' },
+                { label: 'Wait for a batch of 40 to fill the furnace', sub: '120 h', cat: 'Non-value-add', h: 120, why: 'Batch waiting, the largest single time trap here.' },
+                { label: 'Weld-repair blade tip', sub: '2 h', cat: 'Value-add', h: 2, why: 'The core repair.' },
+                { label: 'Await engineering disposition', sub: '48 h', cat: 'Non-value-add', h: 48, why: 'Waiting for a management or engineering decision.' },
+                { label: 'Rework after failed inspection', sub: '6 h', cat: 'Non-value-add', h: 6, why: 'Rework fixes a failure. The customer pays for it to be right the first time.' },
+                { label: 'Re-apply thermal coating', sub: '4 h', cat: 'Value-add', h: 4, why: 'Restores function.' },
+                { label: 'Machine to final profile', sub: '1.5 h', cat: 'Value-add', h: 1.5, why: 'Restores the airfoil geometry.' },
+                { label: 'Move between buildings', sub: '8 h', cat: 'Non-value-add', h: 8, why: 'Transport adds no value.' },
+                { label: 'Wait for release paperwork sign-off', sub: '36 h', cat: 'Non-value-add', h: 36, why: 'Waiting for an administrative decision.' }
+              ],
+              after: 'vsm' },
+            { type: 'classify', tag: 'Stalk\'s 3/3 rule', title: 'Diagnose the waiting',
+              prompt: 'Stalk found that three causes account for about two-thirds of waiting time. Match each wait from the repair shop to its cause.',
+              cats: ['Batch completion', 'Rework', 'Management decision', 'Other'],
+              items: [
+                { label: 'Furnace batch of 40', sub: '120 h', cat: 'Batch completion', why: 'Waiting for the batch to fill. Fix it with smaller furnaces, mixed loads or single-piece flow.' },
+                { label: 'Engineering disposition', sub: '48 h', cat: 'Management decision', why: 'Give standard dispositions to the floor, or use a daily review board.' },
+                { label: 'Failed inspection rework', sub: '6 h', cat: 'Rework', why: 'Fix the root cause at the weld step, for example with automated parameter control.' },
+                { label: 'Release paperwork', sub: '36 h', cat: 'Management decision', why: 'Delegated sign-off authority or digital release removes most of this.' },
+                { label: 'Inter-building transport', sub: '8 h', cat: 'Other', why: 'A layout problem. Co-locate the cell.' }
+              ] },
+            { type: 'quiz', tag: 'Stalk\'s rules', q: 'The "1/4-2-20 rule" says that every time you cut a cycle time to a quarter...',
+              opts: ['Quality improves fourfold and prices rise 20%',
+                     'Labour and working-capital productivity can roughly double, and costs fall by as much as 20%',
+                     'You need four times more capital',
+                     'Market share grows 20 points'],
+              a: 1, why: 'That\'s Stalk\'s rule of thumb. Shorter cycles cut work-in-process, handling and coordination costs. He also described the <strong>3×2 rule</strong>: time-based competitors grew about 3× faster than their industry, with about 2× the profits.' },
+            { type: 'quiz', tag: 'H-Y War', q: 'What was Honda\'s main weapon against Yamaha?',
+              opts: ['Cutting prices on every model', 'A much faster rate of new-model introduction, which made Yamaha\'s range look dated', 'Buying Yamaha\'s dealers', 'Lobbying the Japanese government'],
+              a: 1, why: 'Honda did cut prices and push dealers too, but Stalk focused on <strong>variety and speed</strong>. With 113 model changes, Honda made design freshness the battlefield, and Yamaha couldn\'t keep up.' },
+            { type: 'quiz', tag: 'Consultant judgement', q: 'The shop director wants to buy a second furnace to cut the 120-hour batch wait. What do you ask first?',
+              opts: ['Which vendor is cheapest?',
+                     'Is the furnace actually short of capacity, or is the wait caused by the batch-size rule? Could smaller or mixed loads fix it for free?',
+                     'Can we run the furnace hotter?',
+                     'How many more people should we hire?'],
+              a: 1, why: 'Time traps usually come from <strong>policy</strong> (batch rules, sign-off chains), not from capacity. Challenge the rule before spending capital.' },
+            { type: 'takeaways', items: [
+                '0.05–5 rule: products are usually being worked on for only a tiny fraction of the time they spend in the system.',
+                '3/3 rule: batching, rework and decisions cause most of the waiting.',
+                'Cutting time to a quarter can double productivity and cut cost by up to 20%.',
+                'Speed can be a market weapon. Honda used model variety to beat Yamaha.'] }
+        ]
+    },
+    {
+        id: 'm5', title: 'Capability Showdown', badge: 'Case Cracker',
+        case: 'Walmart vs Kmart · Britannica · Boss Round',
+        blurb: 'Learn the capabilities and deconstruction cases, then face a timed boss round that draws on all five modules.',
+        stages: [
+            { type: 'brief', tag: 'Case briefing', title: 'Competing on capabilities',
+              html: `<p>In "Competing on Capabilities" (HBR, 1992), BCG's <strong>Stalk, Evans and Shulman</strong> compared Kmart and Walmart. In 1979 Kmart led discount retailing with nearly 1,900 stores. Walmart was a small regional chain of about 230 stores.</p>
+                     <p>Over the next decade Walmart became the fastest-growing and most profitable retailer. The authors credited a business process, <strong>cross-docking</strong>, backed by a set of supporting capabilities: a private satellite network linking stores and suppliers, a company truck fleet, and store managers given the authority to act on the data.</p>
+                     <p>Their argument: lasting advantage comes from <strong>business processes that cut across functions</strong>, not just from products or markets.</p>`,
+              facts: [['~1,900', 'Kmart stores, 1979'], ['~230', 'Walmart stores, 1979'], ['1992', 'HBR article']] },
+            { type: 'quiz', tag: 'Cross-docking', q: 'What does cross-docking actually do?',
+              opts: ['Stores goods in large warehouses for months',
+                     'Moves goods from inbound supplier trucks straight to outbound store trucks, often within hours, with little or no storage',
+                     'Lets two stores share one loading dock',
+                     'Ships products directly from the factory to the customer'],
+              a: 1, why: 'Cross-docking replaces inventory with flow. It cut Walmart\'s inventory and handling costs and allowed frequent, small store replenishments. It\'s the same time-based idea as Module 4, applied to logistics.' },
+            { type: 'quiz', tag: 'Capabilities', q: 'Why couldn\'t Kmart simply copy cross-docking?',
+              opts: ['It was patented',
+                     'It only works as a system. Information networks, trucking, supplier links, store-level authority and incentives all have to change together',
+                     'Kmart didn\'t have trucks',
+                     'It is illegal in some states'],
+              a: 1, why: 'A capability is a <strong>set of linked processes and investments</strong>. Copying one visible piece without the rest gives you the cost without the benefit. This is why engineering consultants map the whole system.' },
+            { type: 'brief', tag: 'Case briefing', title: 'Deconstruction: Britannica vs Encarta',
+              html: `<p>In "Strategy and the New Economics of Information" (HBR, 1997), BCG's <strong>Philip Evans and Thomas Wurster</strong> described what happened to <strong>Encyclopaedia Britannica</strong>. Its sales peaked around 1990. Then CD-ROM encyclopedias such as Microsoft's <strong>Encarta</strong> arrived, cheap or bundled free with new PCs.</p>
+                     <p>A printed Britannica set sold for well over $1,000 and cost a few hundred dollars to print and deliver. A CD-ROM cost a dollar or two to produce. Britannica's advantage had depended on its commissioned door-to-door sales force. When information could travel separately from the physical product, that advantage fell apart.</p>
+                     <p>Their idea, <strong>deconstruction</strong>: when information becomes cheap to transmit, the old trade-off between <strong>richness</strong> (depth of information) and <strong>reach</strong> (how many people get it) disappears, and value chains held together by that trade-off break apart.</p>`,
+              facts: [['~1990', 'Britannica sales peak'], ['$1–2', 'CD-ROM production cost'], ['1997', 'HBR article']] },
+            { type: 'quiz', tag: 'Deconstruction', q: 'An engine OEM earns most of its profit from aftermarket parts and service. Sensor data now lets airlines and independent shops predict failures themselves. What is the deconstruction risk?',
+              opts: ['None. The OEM still builds the engine.',
+                     'Diagnostic information is no longer tied to the OEM\'s service network, so independent shops can take the high-margin service business',
+                     'Engines will get cheaper to build',
+                     'Airlines will stop flying'],
+              a: 1, why: 'This is the Britannica pattern. When the information that held a value chain together becomes cheap and widely shared, the profitable piece breaks away. OEMs answer with power-by-the-hour contracts and data platforms.' },
+            { type: 'boss' },
+            { type: 'takeaways', items: [
+                'Capabilities are cross-functional processes, and they\'re hard to copy because they work as a system.',
+                'Cross-docking traded inventory for flow, the same principle as time-based competition.',
+                'Deconstruction: when information becomes cheap to share, value chains held together by it break apart.',
+                'For engineering clients, ask which data or process currently holds their margin together.'] }
+        ]
+    }];
+
+    // Boss-round question bank (drawn from all modules)
+    const BOSS = [
+        { q: 'Low growth, high relative share is a…', opts: ['Star', 'Cash Cow', 'Dog', 'Question Mark'], a: 1 },
+        { q: 'Unit 1 costs $200; 80% curve. Unit 4 costs…', opts: ['$160', '$128', '$100', '$80'], a: 1 },
+        { q: 'Who documented the 80% learning curve for aircraft in 1936?', opts: ['Henderson', 'Wright', 'Stalk', 'Pascale'], a: 1 },
+        { q: 'Giving up small bikes for big bikes was called…', opts: ['Segment retreat', 'Deconstruction', 'Cross-docking', 'Harvesting'], a: 0 },
+        { q: 'Honda introduced or replaced how many models in the H-Y War?', opts: ['37', '60', '113', '250'], a: 2 },
+        { q: 'Which is NOT one of Stalk\'s three main causes of waiting?', opts: ['Batch completion', 'Rework', 'Management decisions', 'Raw material price'], a: 3 },
+        { q: 'Cross-docking replaces inventory with…', opts: ['Advertising', 'Flow', 'Larger warehouses', 'Price cuts'], a: 1 },
+        { q: 'Deconstruction happens when the trade-off between richness and ___ disappears', opts: ['Reach', 'Risk', 'Return', 'Revenue'], a: 0 },
+        { q: 'Relative market share 0.3×, growth 28% →', opts: ['Star', 'Cash Cow', 'Question Mark', 'Dog'], a: 2 },
+        { q: 'Who argued Honda\'s US success was partly emergent?', opts: ['Pascale', 'Wurster', 'Wright', 'Evans'], a: 0 }
+    ];
+
+    // ---------- Views ----------
+    function stars(pct) {
+        const n = pct >= 0.9 ? 3 : pct >= 0.7 ? 2 : pct > 0 ? 1 : 0;
+        return '★'.repeat(n) + '☆'.repeat(3 - n);
+    }
+
+    function home() {
+        window.scrollTo(0, 0);
+        app.innerHTML = '';
+        app.appendChild($(`<section class="hero">
+            <span class="tag">Learning for engineering consultants</span>
+            <h1>Sharpen your consulting instincts with <em>real BCG cases</em></h1>
+            <p>Five game modules built on BCG's best-known published work, from the growth-share matrix to time-based competition, applied to aerospace and engineering scenarios. Each one teaches the case, has you make the calls, and scores your judgement.</p>
+            <div class="howto"><span><b>Earn XP</b> for correct calls</span><span><b>Get up to 3 stars</b> per module</span><span><b>Rank up</b> from Analyst to Partner</span><span><b>Progress</b> is saved in this browser</span></div>
+        </section>`));
+        const grid = $('<div class="grid"></div>');
+        MODULES.forEach((m, i) => {
+            const best = state.best[m.id];
+            const c = $(`<article class="card">
+                <span class="num mono">MODULE 0${i + 1}</span>
+                <h3>${m.title}</h3>
+                <span class="case">${m.case}</span>
+                <p>${m.blurb}</p>
+                <div class="meta"><span class="stars">${best != null ? stars(best) : '☆☆☆'}</span><span>${best != null ? Math.round(best * 100) + '% best' : 'Not started'}</span></div>
+                <button class="btn">${best != null ? 'Replay' : 'Start'}</button>
+            </article>`);
+            c.querySelector('button').onclick = () => play(m);
+            grid.appendChild(c);
+        });
+        app.appendChild(grid);
+        const b = $('<div class="badges"></div>');
+        MODULES.forEach(m => b.appendChild($(`<span class="badge ${state.best[m.id] >= 0.7 ? 'on' : ''}">🏅 ${m.badge}</span>`)));
+        app.appendChild(b);
+        renderXP();
+    }
+
+    function play(mod) {
+        let idx = 0, earned = 0, possible = 0, gained = 0;
+        const award = (pts, max) => { earned += pts; possible += max; gained += pts; };
+
+        function frame() {
+            window.scrollTo(0, 0);
+            app.innerHTML = '';
+            const head = $(`<div class="mhead"><h2>${mod.title}</h2><span class="mscore mono">Score ${earned}/${possible}</span></div>`);
+            app.appendChild(head);
+            const prog = $('<div class="progress"></div>');
+            mod.stages.forEach((_, i) => prog.appendChild($(`<i class="${i < idx ? 'done' : i === idx ? 'cur' : ''}"></i>`)));
+            app.appendChild(prog);
+            const panel = $('<section class="panel"></section>');
+            app.appendChild(panel);
+            const s = mod.stages[idx];
+            const next = () => { idx++; frame(); };
+            const refresh = () => { head.querySelector('.mscore').textContent = `Score ${earned}/${possible}`; };
+            RENDER[s.type](panel, s, next, (p, m) => { award(p, m); refresh(); }, finish);
+        }
+
+        function finish() {
+            const pct = possible ? earned / possible : 0;
+            const prev = state.best[mod.id];
+            const firstBadge = pct >= 0.7 && !(prev >= 0.7);
+            state.best[mod.id] = Math.max(prev || 0, pct);
+            const before = rankFor(state.xp).name;
+            state.xp += gained;
+            save();
+            renderXP();
+            const after = rankFor(state.xp).name;
+            if (after !== before) toast('Promoted to ' + after + '!');
+            else if (firstBadge) toast('Badge unlocked: ' + mod.badge);
+            return { pct, firstBadge, gained };
+        }
+
+        frame();
+    }
+
+    function nextBtn(panel, label, fn) {
+        const row = $(`<div class="row"><button class="btn">${label}</button></div>`);
+        row.querySelector('button').onclick = fn;
+        panel.appendChild(row);
+    }
+
+    const RENDER = {
+        brief(panel, s, next) {
+            panel.innerHTML = `<span class="tag">${s.tag}</span><h3>${s.title}</h3>${s.html}`;
+            if (s.facts) {
+                const f = $('<div class="facts"></div>');
+                s.facts.forEach(([b, t]) => f.appendChild($(`<div class="fact"><b>${b}</b><span>${t}</span></div>`)));
+                panel.appendChild(f);
+            }
+            nextBtn(panel, 'Continue →', next);
+        },
+
+        quiz(panel, s, next, award) {
+            panel.innerHTML = `<span class="tag">${s.tag}</span><h3>${s.q}</h3>`;
+            const opts = $('<div class="opts"></div>');
+            s.opts.forEach((t, i) => {
+                const b = $(`<button class="opt">${String.fromCharCode(65 + i)}. ${t}</button>`);
+                b.onclick = () => {
+                    const ok = i === s.a;
+                    award(ok ? 10 : 0, 10);
+                    opts.querySelectorAll('.opt').forEach((o, j) => {
+                        o.disabled = true;
+                        if (j === s.a) o.classList.add('right');
+                        else if (j === i) o.classList.add('wrong');
+                    });
+                    panel.appendChild($(`<div class="fb ${ok ? 'good' : 'bad'}"><strong>${ok ? 'Correct, +10 XP.' : 'Not quite.'}</strong> ${s.why}</div>`));
+                    nextBtn(panel, 'Next →', next);
+                };
+                opts.appendChild(b);
+            });
+            panel.appendChild(opts);
+        },
+
+        branch(panel, s, next, award) {
+            panel.innerHTML = `<span class="tag">${s.tag}</span><h3>${s.q}</h3>`;
+            const opts = $('<div class="opts"></div>');
+            const best = Math.max(...s.opts.map(o => o.pts));
+            s.opts.forEach((o, i) => {
+                const b = $(`<button class="opt">${String.fromCharCode(65 + i)}. ${o.t}</button>`);
+                b.onclick = () => {
+                    award(o.pts, best);
+                    opts.querySelectorAll('.opt').forEach((x, j) => {
+                        x.disabled = true;
+                        if (s.opts[j].pts === best) x.classList.add('right');
+                        else if (j === i) x.classList.add(o.pts >= 5 ? 'part' : 'wrong');
+                    });
+                    const cls = o.pts === best ? 'good' : o.pts >= 5 ? 'part' : 'bad';
+                    panel.appendChild($(`<div class="fb ${cls}"><strong>+${o.pts} XP.</strong> ${o.fb}<div class="hist"><b>What happened:</b> ${s.hist}</div></div>`));
+                    nextBtn(panel, 'Next decision →', next);
+                };
+                opts.appendChild(b);
+            });
+            panel.appendChild(opts);
+        },
+
+        classify(panel, s, next, award) {
+            panel.innerHTML = `<span class="tag">${s.tag}</span><h3>${s.title}</h3><p>${s.prompt}</p>`;
+            const picks = new Array(s.items.length).fill(null);
+            const list = $('<div class="items"></div>');
+            s.items.forEach((it, i) => {
+                const row = $(`<div class="item"><div class="lbl">${it.label}</div><div class="sub mono">${it.sub}</div><div class="chips"></div></div>`);
+                const chips = row.querySelector('.chips');
+                s.cats.forEach(c => {
+                    const ch = $(`<button class="chip">${c}</button>`);
+                    ch.onclick = () => {
+                        if (list.dataset.locked) return;
+                        picks[i] = c;
+                        chips.querySelectorAll('.chip').forEach(x => x.classList.toggle('sel', x === ch));
+                        submit.disabled = picks.includes(null);
+                    };
+                    chips.appendChild(ch);
+                });
+                list.appendChild(row);
+            });
+            panel.appendChild(list);
+            const row = $('<div class="row"><button class="btn" disabled>Submit</button><span class="mscore">Pick a category for every item</span></div>');
+            const submit = row.querySelector('button');
+            panel.appendChild(row);
+            submit.onclick = () => {
+                list.dataset.locked = '1';
+                let right = 0;
+                s.items.forEach((it, i) => {
+                    const ok = picks[i] === it.cat;
+                    if (ok) right++;
+                    const r = list.children[i];
+                    r.querySelectorAll('.chip').forEach(ch => {
+                        ch.classList.remove('sel');
+                        if (ch.textContent === it.cat) ch.classList.add('right');
+                        else if (ch.textContent === picks[i]) ch.classList.add('wrong');
+                    });
+                    r.appendChild($(`<div class="why">${ok ? '✓' : '✗'} ${it.why}</div>`));
+                });
+                award(right * 5, s.items.length * 5);
+                row.remove();
+                panel.appendChild($(`<div class="fb ${right === s.items.length ? 'good' : right >= s.items.length / 2 ? 'part' : 'bad'}"><strong>${right}/${s.items.length} correct, +${right * 5} XP.</strong></div>`));
+                if (s.after && AFTER[s.after]) AFTER[s.after](panel, s);
+                nextBtn(panel, 'Next →', next);
+            };
+        },
+
+        explorer(panel, s, next, award) {
+            panel.innerHTML = `<span class="tag">Interactive lab</span><h3>Fly the experience curve</h3>
+                <p>Move the sliders to see how the learning rate changes unit cost over a production run. Then hit the target: get <strong>unit 500 below $30k</strong> with the gentlest curve (highest rate) you can.</p>`;
+            const sl = $(`<div class="sliders">
+                <label>Learning rate <output id="rOut"></output><input type="range" id="r" min="70" max="95" value="90"></label>
+                <label>First-unit cost ($k) <output id="cOut"></output><input type="range" id="c" min="50" max="300" step="10" value="150"></label>
+            </div>`);
+            panel.appendChild(sl);
+            const W = 640, H = 300, P = 44, N = 1000;
+            const svg = $(`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Unit cost versus cumulative units"></svg>`);
+            panel.appendChild(svg);
+            const readout = $('<p class="mono" style="margin-top:0.75rem"></p>');
+            panel.appendChild(readout);
+            const r = sl.querySelector('#r'), c = sl.querySelector('#c');
+            let scored = false;
+
+            function draw() {
+                const rate = r.value / 100, c1 = +c.value;
+                sl.querySelector('#rOut').textContent = r.value + '%';
+                sl.querySelector('#cOut').textContent = '$' + c1 + 'k';
+                const ymax = 300;
+                const x = n => P + (Math.log10(n) / Math.log10(N)) * (W - P * 1.5);
+                const y = v => H - P + 10 - (v / ymax) * (H - P * 1.5);
+                let d = '';
+                for (let n = 1; n <= N; n = Math.ceil(n * 1.08)) d += (d ? 'L' : 'M') + x(n).toFixed(1) + ',' + y(unitCost(c1, n, rate)).toFixed(1);
+                d += 'L' + x(N).toFixed(1) + ',' + y(unitCost(c1, N, rate)).toFixed(1);
+                let grid = '';
+                [1, 10, 100, 1000].forEach(n => grid += `<line x1="${x(n)}" x2="${x(n)}" y1="${P / 2}" y2="${H - P + 10}" stroke="rgba(0,212,255,0.08)"/><text x="${x(n)}" y="${H - P + 28}" font-size="11" text-anchor="middle">${n}</text>`);
+                [0, 100, 200, 300].forEach(v => grid += `<line x1="${P}" x2="${W - P / 2}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(0,212,255,0.08)"/><text x="${P - 6}" y="${y(v) + 4}" font-size="11" text-anchor="end">${v}</text>`);
+                const u500 = unitCost(c1, 500, rate);
+                svg.innerHTML = grid +
+                    `<line x1="${P}" x2="${W - P / 2}" y1="${y(30)}" y2="${y(30)}" stroke="#ff6b35" stroke-dasharray="4 4"/>
+                     <text x="${W - P / 2}" y="${y(30) - 6}" font-size="11" text-anchor="end" style="fill:#ff6b35">target $30k</text>
+                     <path d="${d}" fill="none" stroke="#00d4ff" stroke-width="2.5"/>
+                     <circle cx="${x(500)}" cy="${y(u500)}" r="5" fill="${u500 < 30 ? '#3ddc97' : '#ff5d73'}"/>
+                     <text x="${W / 2}" y="${H - 4}" font-size="11" text-anchor="middle">Cumulative units (log scale)</text>
+                     <text x="12" y="${H / 2}" font-size="11" text-anchor="middle" transform="rotate(-90 12 ${H / 2})">Unit cost ($k)</text>`;
+                readout.innerHTML = `Unit 10: $${fmt(unitCost(c1, 10, rate), 1)}k · Unit 100: $${fmt(unitCost(c1, 100, rate), 1)}k · <strong style="color:${u500 < 30 ? 'var(--good)' : 'var(--bad)'}">Unit 500: $${fmt(u500, 1)}k</strong>`;
+            }
+            r.oninput = c.oninput = draw;
+            draw();
+
+            const row = $('<div class="row"><button class="btn">Lock in my curve</button></div>');
+            panel.appendChild(row);
+            row.querySelector('button').onclick = () => {
+                if (scored) return;
+                const rate = r.value / 100, c1 = +c.value, u = unitCost(c1, 500, rate);
+                if (u >= 30) { toast('Unit 500 is still above $30k. Keep adjusting.'); return; }
+                scored = true;
+                // The highest rate that hits target for the chosen first-unit cost earns full marks.
+                let bestRate = 70;
+                for (let t = 95; t >= 70; t--) if (unitCost(c1, 500, t / 100) < 30) { bestRate = t; break; }
+                const pts = r.value >= bestRate ? 10 : r.value >= bestRate - 3 ? 7 : 4;
+                award(pts, 10);
+                r.disabled = c.disabled = true;
+                row.remove();
+                panel.appendChild($(`<div class="fb ${pts === 10 ? 'good' : 'part'}"><strong>+${pts} XP.</strong> At $${c1}k first-unit cost, the gentlest curve that hits the target is about <strong>${bestRate}%</strong>. Notice that cutting first-unit cost (design for manufacture) often helps as much as faster learning. Engineers control both.</div>`));
+                nextBtn(panel, 'Next →', next);
+            };
+        },
+
+        sim(panel, s, next, award) {
+            panel.innerHTML = `<span class="tag">Simulation · Semiconductor pricing war</span><h3>Price ahead of the curve</h3>
+                <p>You're a new chip maker in a market that grows 60% a year. The incumbent has twice your cumulative volume, so lower costs, and always prices at cost + 25%. Both of you follow a <strong>75% experience curve</strong>. Pick your price each year for five years. The goal is the highest <strong>total profit</strong>.</p>`;
+            const RATE = 0.75, C0 = 100, BASE = 1000;
+            const cost = cum => C0 * Math.pow(cum / BASE, Math.log2(RATE));
+            const STRATS = {
+                forward: { label: 'Forward-price: 10% below the incumbent', price: (me, comp) => comp * 0.9 },
+                match: { label: 'Match the incumbent', price: (me, comp) => comp },
+                premium: { label: 'Premium: my cost + 40%', price: (me, comp) => me * 1.4 }
+            };
+            function step(st, key) {
+                const M = BASE * Math.pow(1.6, st.year);
+                const myC = cost(st.me), compC = cost(st.comp);
+                const compP = compC * 1.25, myP = STRATS[key].price(myC, compP);
+                const share = Math.min(0.9, Math.max(0.05, 0.5 * Math.pow(compP / myP, 3)));
+                const vol = share * M, profit = (myP - myC) * vol;
+                return { year: st.year + 1, me: st.me + vol, comp: st.comp + (1 - share) * M, total: st.total + profit,
+                         row: { y: st.year + 1, myC, myP, compP, share, profit } };
+            }
+            function runPure(key) {
+                let st = { year: 0, me: BASE, comp: 2 * BASE, total: 0 };
+                for (let i = 0; i < 5; i++) st = step(st, key);
+                return st.total;
+            }
+            let st = { year: 0, me: BASE, comp: 2 * BASE, total: 0 };
+            const rows = [];
+            const table = $('<div class="tablewrap"><table><thead><tr><th>Year</th><th>My cost</th><th>My price</th><th>Rival price</th><th>My share</th><th>Profit ($k)</th></tr></thead><tbody></tbody></table></div>');
+            panel.appendChild(table);
+            const status = $('<p class="mono" style="margin-top:0.75rem"></p>');
+            panel.appendChild(status);
+            const choice = $('<div class="opts"></div>');
+            panel.appendChild(choice);
+
+            function show() {
+                table.querySelector('tbody').innerHTML = rows.map(r => `<tr><td>${r.y}</td><td>$${fmt(r.myC, 1)}</td><td>$${fmt(r.myP, 1)}</td><td>$${fmt(r.compP, 1)}</td><td>${fmt(r.share * 100)}%</td><td class="${r.profit >= 0 ? 'pos' : 'neg'}">${fmt(r.profit / 1000, 1)}</td></tr>`).join('');
+                status.innerHTML = `Year ${st.year + (st.year < 5 ? 1 : 0)} of 5 · My unit cost $${fmt(cost(st.me), 1)} vs rival $${fmt(cost(st.comp), 1)} · Total profit <span class="${st.total >= 0 ? 'pos' : 'neg'}">$${fmt(st.total / 1000, 1)}k</span>`;
+                choice.innerHTML = '';
+                if (st.year >= 5) return done();
+                Object.entries(STRATS).forEach(([k, v]) => {
+                    const b = $(`<button class="opt">${v.label}</button>`);
+                    b.onclick = () => { st = step(st, k); rows.push(st.row); show(); };
+                    choice.appendChild(b);
+                });
+            }
+            function done() {
+                const pure = { forward: runPure('forward'), match: runPure('match'), premium: runPure('premium') };
+                const best = Math.max(...Object.values(pure));
+                const pts = st.total >= best * 0.95 ? 20 : st.total >= best * 0.7 ? 14 : st.total > 0 ? 8 : 3;
+                award(pts, 20);
+                panel.appendChild($(`<div class="fb ${pts === 20 ? 'good' : pts >= 14 ? 'part' : 'bad'}"><strong>+${pts} XP.</strong> Your five-year profit: <strong>$${fmt(st.total / 1000, 1)}k</strong>.
+                    For comparison, always forward-pricing earns $${fmt(pure.forward / 1000, 1)}k, always matching $${fmt(pure.match / 1000, 1)}k, and always charging a premium $${fmt(pure.premium / 1000, 1)}k.
+                    <div class="hist"><b>Lesson:</b> In a fast-growing market, accepting early losses to win share moves you down the curve faster than the incumbent. You can end up with the lower cost even though you started behind. Premium pricing feels safe but leaves you a high-cost niche player, which is the British motorcycle trap from Module 3.</div></div>`));
+                nextBtn(panel, 'Next →', next);
+            }
+            show();
+        },
+
+        boss(panel, s, next, award) {
+            const qs = BOSS.slice().sort(() => Math.random() - 0.5).slice(0, 8);
+            const LIMIT = 75;
+            let i = 0, right = 0, left = LIMIT, tick;
+            panel.innerHTML = `<span class="tag">Boss round</span><h3>The Partner's rapid-fire review</h3>
+                <p>Eight questions from all five modules in ${LIMIT} seconds. Each correct answer is worth 5 XP, and any time left over earns a bonus.</p>`;
+            nextBtn(panel, 'Start the clock', start);
+
+            function start() {
+                panel.innerHTML = `<div class="mhead"><span class="tag">Boss round</span><span class="timer mono" id="t">${left}</span></div><div class="timerbar"><div id="tb" style="width:100%"></div></div><div id="bq"></div>`;
+                tick = setInterval(() => {
+                    left--;
+                    const t = panel.querySelector('#t'), tb = panel.querySelector('#tb');
+                    if (!t) return clearInterval(tick);
+                    t.textContent = left;
+                    tb.style.width = (left / LIMIT * 100) + '%';
+                    if (left <= 0) end();
+                }, 1000);
+                ask();
+            }
+            function ask() {
+                const host = panel.querySelector('#bq');
+                if (i >= qs.length) return end();
+                const q = qs[i];
+                host.innerHTML = `<p class="mono" style="color:var(--text-muted)">Q${i + 1}/${qs.length} · ${right} correct</p><h3>${q.q}</h3>`;
+                const opts = $('<div class="opts"></div>');
+                q.opts.forEach((t, j) => {
+                    const b = $(`<button class="opt">${t}</button>`);
+                    b.onclick = () => {
+                        opts.querySelectorAll('.opt').forEach(o => o.disabled = true);
+                        b.classList.add(j === q.a ? 'right' : 'wrong');
+                        if (j !== q.a) opts.children[q.a].classList.add('right');
+                        if (j === q.a) right++;
+                        i++;
+                        setTimeout(ask, 550);
+                    };
+                    opts.appendChild(b);
+                });
+                host.appendChild(opts);
+            }
+            function end() {
+                if (tick === null) return;
+                clearInterval(tick); tick = null;
+                const bonus = right === qs.length ? Math.max(0, Math.round(left / 3)) : 0;
+                award(right * 5 + bonus, qs.length * 5);
+                panel.innerHTML = `<span class="tag">Boss round complete</span><h3>${right}/${qs.length} correct${bonus ? ` · +${bonus} speed bonus` : ''}</h3>
+                    <p>${right === qs.length ? 'A clean sweep. The Partner is impressed.' : right >= 6 ? 'Solid. A couple of facts to go back over.' : 'Go back over the earlier modules and try again. Replays count toward your best score.'}</p>`;
+                nextBtn(panel, 'Debrief →', next);
+            }
+        },
+
+        takeaways(panel, s, next, award, finish) {
+            const r = finish();
+            panel.innerHTML = `<div class="result">
+                <span class="tag">Module complete</span>
+                <div class="big">${stars(r.pct)}</div>
+                <h3>${Math.round(r.pct * 100)}% · +${r.gained} XP</h3>
+                ${r.firstBadge ? `<p style="color:var(--warn)">🏅 Badge unlocked: ${MODULES.find(m => m.stages.includes(s)).badge}</p>` : ''}
+            </div>
+            <h3 style="margin-top:1.5rem">Consultant's toolkit</h3>
+            <ul>${s.items.map(t => `<li>${t}</li>`).join('')}</ul>`;
+            const row = $('<div class="row"><button class="btn">Back to modules</button></div>');
+            row.querySelector('button').onclick = home;
+            panel.appendChild(row);
+        }
+    };
+
+    // Post-classification visuals
+    const AFTER = {
+        matrix(panel, s) {
+            const W = 560, H = 360, P = 40;
+            const x = sh => P + (1 - Math.log10(sh)) / 2 * (W - 2 * P);   // 10× on the left, 0.1× on the right
+            const y = g => H - P - (g / 40) * (H - 2 * P);
+            const color = { 'Star': '#ffc857', 'Cash Cow': '#3ddc97', 'Question Mark': '#00d4ff', 'Dog': '#ff5d73' };
+            let dots = '';
+            s.items.forEach(it => {
+                const rad = 6 + Math.sqrt(it.r) * 14;
+                dots += `<circle cx="${x(it.s)}" cy="${y(it.g)}" r="${rad}" fill="${color[it.cat]}" fill-opacity="0.35" stroke="${color[it.cat]}"/>
+                         <text x="${x(it.s)}" y="${y(it.g) - rad - 4}" font-size="10" text-anchor="middle">${it.label.split(' ')[0]}</text>`;
+            });
+            panel.appendChild($(`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Growth-share matrix of the portfolio">
+                <line x1="${x(1)}" x2="${x(1)}" y1="${P}" y2="${H - P}" stroke="rgba(255,255,255,0.25)" stroke-dasharray="4 4"/>
+                <line x1="${P}" x2="${W - P}" y1="${y(10)}" y2="${y(10)}" stroke="rgba(255,255,255,0.25)" stroke-dasharray="4 4"/>
+                <text x="${P + 6}" y="${P + 14}" font-size="12" style="fill:#ffc857">STARS</text>
+                <text x="${W - P - 6}" y="${P + 14}" font-size="12" text-anchor="end" style="fill:#00d4ff">QUESTION MARKS</text>
+                <text x="${P + 6}" y="${H - P - 8}" font-size="12" style="fill:#3ddc97">CASH COWS</text>
+                <text x="${W - P - 6}" y="${H - P - 8}" font-size="12" text-anchor="end" style="fill:#ff5d73">DOGS</text>
+                ${dots}
+                <text x="${W / 2}" y="${H - 10}" font-size="11" text-anchor="middle">Relative market share (log, 10× → 0.1×) · bubble = revenue</text>
+                <text x="14" y="${H / 2}" font-size="11" text-anchor="middle" transform="rotate(-90 14 ${H / 2})">Market growth %</text>
+            </svg>`));
+        },
+        vsm(panel, s) {
+            const total = s.items.reduce((a, it) => a + it.h, 0);
+            const va = s.items.filter(it => it.cat === 'Value-add').reduce((a, it) => a + it.h, 0);
+            let xPos = 0, bars = '';
+            const W = 600;
+            s.items.forEach(it => {
+                const w = it.h / total * W;
+                bars += `<rect x="${xPos}" y="10" width="${Math.max(w, 1.5)}" height="36" fill="${it.cat === 'Value-add' ? '#3ddc97' : '#ff5d73'}" fill-opacity="${it.cat === 'Value-add' ? 1 : 0.45}"><title>${it.label}: ${it.h} h</title></rect>`;
+                xPos += w;
+            });
+            panel.appendChild($(`<svg class="chart" viewBox="0 0 ${W} 70" role="img" aria-label="Timeline of value-add versus waiting time">${bars}
+                <text x="0" y="64" font-size="11">0 h</text><text x="${W}" y="64" font-size="11" text-anchor="end">${fmt(total, 1)} h</text></svg>`));
+            panel.appendChild($(`<div class="facts">
+                <div class="fact"><b>${fmt(va, 1)} h</b><span>Value-add time</span></div>
+                <div class="fact"><b>${fmt(total, 1)} h</b><span>Total throughput time</span></div>
+                <div class="fact"><b>${fmt(va / total * 100, 1)}%</b><span>Value-add ratio. Stalk's 0.05–5 rule in action.</span></div>
+            </div>`));
+        }
+    };
+
+    document.getElementById('homeLink').onclick = home;
+    home();
+    </script>
+</body>
+</html>
