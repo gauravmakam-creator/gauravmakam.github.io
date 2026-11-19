@@ -247,10 +247,36 @@
     *, *::before { animation: none !important; transition: none !important; }
     .wish { opacity: 1; transform: none; }
   }
+
+  /* music toggle */
+  .music-btn {
+    position: fixed; right: 18px; bottom: 18px; z-index: 60;
+    width: 58px; height: 58px; border-radius: 50%; border: 2px solid var(--gold);
+    background: var(--coat); color: var(--gold-light); font-size: 24px; cursor: pointer;
+    display: grid; place-items: center;
+    box-shadow: 0 10px 24px rgba(20, 17, 20, .35);
+    transition: transform .2s;
+  }
+  .music-btn:hover { transform: scale(1.08); }
+  .music-btn.playing::before {
+    content: ""; position: absolute; inset: -8px; border-radius: 50%;
+    border: 2px solid var(--pink-soft); animation: ring 1.6s ease-out infinite;
+  }
+  @keyframes ring { from { transform: scale(.85); opacity: 1; } to { transform: scale(1.35); opacity: 0; } }
+  .music-btn.playing .note { animation: bob 1.2s ease-in-out infinite; display: inline-block; }
+  .music-hint {
+    position: fixed; right: 86px; bottom: 30px; z-index: 60;
+    background: #fff; color: var(--ink); font-weight: 600; font-size: 13px;
+    padding: 8px 14px; border-radius: 999px; box-shadow: 0 8px 20px rgba(20,17,20,.18);
+    transition: opacity .5s; white-space: nowrap;
+  }
+  .music-hint.hide { opacity: 0; pointer-events: none; }
 </style>
 </head>
 <body>
 
+<button class="music-btn" id="musicBtn" aria-label="Play birthday music" aria-pressed="false"><span class="note">🎵</span></button>
+<div class="music-hint" id="musicHint">Tap anywhere for music 🎶</div>
 <canvas id="confetti"></canvas>
 <div class="floaties" id="floaties" aria-hidden="true"></div>
 
@@ -488,6 +514,103 @@
   }
   cake.addEventListener('click', toggleCake);
   cake.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCake(); } });
+</script>
+
+<script>
+  // ---------- background music: music-box "Happy Birthday" (public-domain melody), synthesized live ----------
+  (function () {
+    const btn = document.getElementById('musicBtn');
+    const hint = document.getElementById('musicHint');
+    const N = { C4:261.63, D4:293.66, E4:329.63, Fs4:369.99, G4:392.00, A4:440.00, B4:493.88,
+                C5:523.25, D5:587.33, G2:98.00, D3:146.83, C3:130.81, G3:196.00, B3:246.94, Fs3:185.00, A3:220.00, E3:164.81 };
+    // [note, start beat, length in beats]
+    const melody = [
+      ['D4',0,.75],['D4',.75,.25],['E4',1,1],['D4',2,1],['G4',3,1],['Fs4',4,2],
+      ['D4',6,.75],['D4',6.75,.25],['E4',7,1],['D4',8,1],['A4',9,1],['G4',10,2],
+      ['D4',12,.75],['D4',12.75,.25],['D5',13,1],['B4',14,1],['G4',15,1],['Fs4',16,1],['E4',17,1],
+      ['C5',18,.75],['C5',18.75,.25],['B4',19,1],['G4',20,1],['A4',21,1],['G4',22,3]
+    ];
+    // gentle chords on each bar: [beat, notes]
+    const chords = [
+      [1,['G2','B3','D4']],[4,['D3','Fs3','A3']],[7,['D3','Fs3','A3']],[10,['G2','B3','D4']],
+      [13,['G2','B3','D4']],[16,['C3','E3','G3']],[19,['G2','B3','D4']],[21,['D3','Fs3','A3']],[22,['G2','B3','D4']]
+    ];
+    const BEAT = 0.6, LOOP = 28;   // 100 bpm, 28-beat loop incl. a short rest
+    let ctx, master, wet, playing = false, nextLoop = 0, timer = null, userMuted = false;
+
+    function setup() {
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      master = ctx.createGain(); master.gain.value = 0;
+      master.connect(ctx.destination);
+      // soft echo for a dreamy music-box room
+      const delay = ctx.createDelay(); delay.delayTime.value = BEAT * 0.75;
+      const fb = ctx.createGain(); fb.gain.value = 0.28;
+      wet = ctx.createGain(); wet.gain.value = 0.35;
+      wet.connect(delay); delay.connect(fb); fb.connect(delay); delay.connect(master);
+    }
+    function bell(freq, t, dur, vol) {
+      [[1, 1], [2, .35], [3.01, .12]].forEach(([mult, amp]) => {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = 'sine'; o.frequency.value = freq * mult;
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(vol * amp, t + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + Math.max(dur, .4) + 1.2);
+        o.connect(g); g.connect(master); g.connect(wet);
+        o.start(t); o.stop(t + dur + 1.6);
+      });
+    }
+    function pad(freq, t, dur, vol) {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'triangle'; o.frequency.value = freq;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(vol, t + 0.15);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t + dur + .1);
+    }
+    function scheduleLoop(start) {
+      melody.forEach(([n, b, l]) => bell(N[n] * 2, start + b * BEAT, l * BEAT, 0.16));
+      chords.forEach(([b, ns]) => ns.forEach(n => pad(N[n], start + b * BEAT, BEAT * 2.8, 0.05)));
+    }
+    function pump() {
+      while (nextLoop < ctx.currentTime + 2) { scheduleLoop(nextLoop); nextLoop += LOOP * BEAT; }
+    }
+    function play() {
+      if (!ctx) setup();
+      ctx.resume();
+      if (!playing) {
+        nextLoop = Math.max(nextLoop, ctx.currentTime + 0.1);
+        pump(); timer = setInterval(pump, 500);
+      }
+      master.gain.cancelScheduledValues(ctx.currentTime);
+      master.gain.setTargetAtTime(0.9, ctx.currentTime, 0.3);
+      playing = true;
+      btn.classList.add('playing'); btn.setAttribute('aria-pressed', 'true');
+      btn.setAttribute('aria-label', 'Pause birthday music');
+      hint.classList.add('hide');
+    }
+    function pause() {
+      if (!ctx) return;
+      master.gain.setTargetAtTime(0, ctx.currentTime, 0.15);
+      clearInterval(timer); playing = false;
+      setTimeout(() => { if (!playing) ctx.suspend(); }, 600);
+      btn.classList.remove('playing'); btn.setAttribute('aria-pressed', 'false');
+      btn.setAttribute('aria-label', 'Play birthday music');
+    }
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (playing) { userMuted = true; pause(); } else { userMuted = false; play(); }
+    });
+    // browsers only allow sound after a gesture: start on her first tap/click/key
+    function firstGesture() {
+      if (!userMuted && !playing) play();
+      removeEventListener('pointerdown', firstGesture);
+      removeEventListener('keydown', firstGesture);
+    }
+    addEventListener('pointerdown', firstGesture);
+    addEventListener('keydown', firstGesture);
+    setTimeout(() => { if (!playing) hint.classList.add('hide'); }, 9000);
+  })();
 </script>
 </body>
 </html>
